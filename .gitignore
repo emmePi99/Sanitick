@@ -1,0 +1,23 @@
+# Environment variables
+.env
+.env.*
+.docker/
+# Node.js
+node_modules
+
+# NestJS build output
+backend/dist
+
+# Other ignores
+*.log
+*.sqlite
+*.sqlite-journal
+
+# VSCode
+.vscode/
+
+# Docker compose overrides
+docker-compose.override.yaml
+
+# Project specific files
+piano_implementazione_cup.md
