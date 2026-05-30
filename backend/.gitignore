@@ -161,9 +161,6 @@ coverage/
 .gitattributes
 .gitkeep
 
-# Package-lock.json v3 (npm 7+)
-package-lock.json
-
 # Yarn v2 files
 .yarn/cache
 .yarn/unplugged

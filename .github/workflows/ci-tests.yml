@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
+  # --- JOB 1: TEST DEL BACKEND (NESTJS) ---
   backend-tests:
     runs-on: ubuntu-latest
 
@@ -14,8 +15,6 @@ jobs:
       - name: Checkout del codice
         uses: actions/checkout@v4
 
-      # Passiamo le variabili hardcodate direttamente a Docker Compose.
-      # Docker le intercetta dal sistema operativo del runner e le inietta nel DB di test.
       - name: Avvia il Database di Test (Postgres)
         env:
           POSTGRES_USER: sanitick_test_user
@@ -23,23 +22,21 @@ jobs:
           POSTGRES_DB: sanitick_test_db
         run: |
           docker compose up -d
-          # Diamo a Postgres 10 secondi per completare l'inizializzazione interna
           sleep 10 
 
       - name: Setup di Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
-          cache-dependency-path: './backend/package-lock.json'
+          cache-dependency-path: './backend/package-lock.json' # Ora funzionerà perché lo tracciamo!
 
       - name: Installazione dipendenze Backend
         run: |
           cd backend
           npm ci
 
-      # Passiamo le STESSE variabili hardcodate a NestJS, così sa come connettersi a localhost
-      - name: Esecuzione Test Sanitick (Unit & E2E)
+      - name: Esecuzione Test Sanitick Backend (Unit & E2E)
         env:
           DATABASE_HOST: localhost
           DATABASE_PORT: 5432
@@ -51,3 +48,29 @@ jobs:
           cd backend
           npm run test
           npm run test:e2e
+
+  # --- JOB 2: TEST DEL FRONTEND (ANGULAR) ---
+  frontend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      - name: Setup di Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Installazione dipendenze Frontend
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Esecuzione Test Angular (Headless)
+        run: |
+          cd frontend
+          # Gira in modalità headless (senza interfaccia grafica) sul server di GitHub
+          npx ng test --watch=false --browsers=ChromeHeadless
