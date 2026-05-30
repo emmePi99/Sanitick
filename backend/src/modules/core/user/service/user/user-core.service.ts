@@ -2,20 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../entity/user/user.entity';
+import { TypeOrmCrudService } from '@dataui/crud-typeorm';
+import { UserRole } from '@shared/index';
 
 @Injectable()
-export class UserCoreService {
+export class UserCoreService extends TypeOrmCrudService<User> {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
-
-  async findOneById(id: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } });
+    @InjectRepository(User) protected readonly userRepository: Repository<User>,
+  ) {
+    super(userRepository);
   }
 
-  async findOneByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { email } });
+  async create(userData: Partial<User>): Promise<User> {
+    const user = this.userRepository.create(userData);
+    return this.userRepository.save(user);
   }
 
   async findOneByEmailWithPassword(email: string): Promise<User | null> {
@@ -30,19 +30,5 @@ export class UserCoreService {
         lastName: true
       } 
     });
-  }
-
-  async create(userData: Partial<User>): Promise<User> {
-    const user = this.userRepository.create(userData);
-    return this.userRepository.save(user);
-  }
-
-  async update(id: string, userData: Partial<User>): Promise<User | null> {
-    await this.userRepository.update(id, userData);
-    return this.findOneById(id);
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.userRepository.delete(id);
   }
 }

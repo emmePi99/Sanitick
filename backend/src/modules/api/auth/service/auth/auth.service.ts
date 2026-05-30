@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto): Promise<User> {
-    const existingUser = await this.userCoreService.findOneByEmail(registerDto.email);
+    const existingUser = await this.userCoreService.findOneBy({email: registerDto.email});
     if (existingUser) {
       throw new ConflictException('Email already in use');
     }
@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   async impersonate(adminId: string, targetUserId: string): Promise<{ accessToken: string }> {
-    const targetUser = await this.userCoreService.findOneById(targetUserId);
+    const targetUser = await this.userCoreService.findOneBy({ id: targetUserId });
     if (!targetUser) {
       throw new ConflictException('Target user not found');
     }
