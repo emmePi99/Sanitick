@@ -2,8 +2,8 @@ import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { User } from '../modules/core/user/entity/user/user.entity';
 import { Doctor } from '../modules/core/doctor/entity/doctor/doctor.entity';
-import { Slot } from '../modules/core/slot/entity/slot/slot.entity';
 import { Booking } from '../modules/core/booking/entity/booking/booking.entity';
+import { DoctorSchedule } from 'src/modules/core/doctor-schedule/entity/doctor-schedule.entity';
 
 dotenv.config({ path: '../.env' });
 
@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: process.env.POSTGRES_DB,
   synchronize: false,
   logging: true,
-  entities: [User, Doctor, Slot, Booking],
+  entities: [User, Doctor, Booking, DoctorSchedule],
   migrations: ['src/database/migrations/*.ts'],
   subscribers: [],
 });

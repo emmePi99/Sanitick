@@ -5,13 +5,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './modules/core/user/entity/user/user.entity';
 import { Doctor } from './modules/core/doctor/entity/doctor/doctor.entity';
-import { Slot } from './modules/core/slot/entity/slot/slot.entity';
 import { Booking } from './modules/core/booking/entity/booking/booking.entity';
-import { UserCoreModule } from './modules/core/user/module/user/user-core.module';
-import { DoctorCoreModule } from './modules/core/doctor/module/doctor/doctor-core.module';
-import { SlotCoreModule } from './modules/core/slot/module/slot/slot-core.module';
-import { BookingCoreModule } from './modules/core/booking/module/booking/booking-core.module';
-import { AuthModule } from './modules/api/auth/module/auth/auth-api.module';
+import { AuthModule } from './modules/api/auth/auth.module';
+import { DoctorScheduleModule } from './modules/core/doctor-schedule/doctor-schedule.module';
+import { BookingCoreModule } from './modules/core/booking/booking-core.module';
+import { DoctorCoreModule } from './modules/core/doctor/doctor-core.module';
+import { UserCoreModule } from './modules/core/user/user-core.module';
+import { DoctorSchedule } from './modules/core/doctor-schedule/entity/doctor-schedule.entity';
 
 @Module({
   imports: [
@@ -29,16 +29,16 @@ import { AuthModule } from './modules/api/auth/module/auth/auth-api.module';
         username: configService.get<string>('POSTGRES_USER'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DB'),
-        entities: [User, Doctor, Slot, Booking],
+        entities: [User, Doctor, Booking, DoctorSchedule],
         synchronize: false,
         logging: true,
       }),
     }),
     UserCoreModule,
     DoctorCoreModule,
-    SlotCoreModule,
     BookingCoreModule,
     AuthModule,
+    DoctorScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
