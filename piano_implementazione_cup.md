@@ -16,6 +16,16 @@ Questo documento delinea la strategia d'implementazione e l'architettura tecnica
 
 ---
 
+## 🧪 Approccio al Testing
+
+Il testing è una parte integrante e continua del ciclo di sviluppo, non una fase isolata. Per ogni funzionalità sviluppata (dal backend al frontend), dovrà essere implementata una copertura di test adeguata a garantirne la correttezza e la non regressione.
+
+*   **Test Unitari (Unit Tests):** Ogni servizio, controller o componente deve essere accompagnato da test unitari che ne verifichino la logica in isolamento.
+*   **Test di Integrazione (Integration Tests):** Verificheranno l'interazione tra i diversi moduli del backend, specialmente la comunicazione con il database.
+*   **Test End-to-End (E2E):** Simuleranno il percorso completo dell'utente attraverso l'applicazione, garantendo che i flussi critici (es. ricerca, prenotazione, login) funzionino come atteso.
+
+---
+
 ## 🚀 Roadmap delle Operazioni Fondamentali
 
 ### 📦 Fase 1: Setup dell'Ambiente e Condivisione dei Modelli
