@@ -69,8 +69,8 @@ jobs:
           cd frontend
           npm ci
 
-      - name: Esecuzione Test Angular (Headless)
+      - name: Esecuzione Test Angular (Vitest)
         run: |
           cd frontend
-          # Gira in modalità headless (senza interfaccia grafica) sul server di GitHub
-          npx ng test --watch=false --browsers=ChromeHeadless
+          # Diciamo a Vitest di fare un solo ciclo di test senza rimanere in ascolto (--watch=false)
+          npm run test -- --watch=false
