@@ -25,7 +25,8 @@
     "paths": {
       "@shared/*": ["../shared/*"],
       "@shared": ["../shared/index"]
-    }
+    },
+    "strictPropertyInitialization": false
   },
   "include": ["src/**/*"]
 }
