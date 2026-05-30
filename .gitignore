@@ -20,4 +20,4 @@ backend/dist
 docker-compose.override.yaml
 
 # Project specific files
-piano_implementazione_cup.md
+# piano_implementazione_cup.md (Removed from ignore)
