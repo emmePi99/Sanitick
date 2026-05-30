@@ -2,7 +2,7 @@ name: Sanitick CI - Automated Testing
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, implementing_test_pipeline ]
   pull_request:
     branches: [ main ]
 
