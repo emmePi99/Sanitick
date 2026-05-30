@@ -11,17 +11,26 @@ jobs:
   backend-tests:
     runs-on: ubuntu-latest
 
+    # SPOSTATE QUI: Ora queste variabili sono visibili sia a Docker che a NestJS!
+    env:
+      POSTGRES_USER: sanitick_test_user
+      POSTGRES_PASSWORD: sanitick_test_password
+      POSTGRES_DB: sanitick_test_db
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: sanitick_test_user
+      DATABASE_PASSWORD: sanitick_test_password
+      DATABASE_NAME: sanitick_test_db
+      JWT_SECRET: chiave_segreta_finta_per_i_test_di_sanitick_2026
+
     steps:
       - name: Checkout del codice
         uses: actions/checkout@v4
 
       - name: Avvia il Database di Test (Postgres)
-        env:
-          POSTGRES_USER: sanitick_test_user
-          POSTGRES_PASSWORD: sanitick_test_password
-          POSTGRES_DB: sanitick_test_db
         run: |
           docker compose up -d
+          # Diamo a Postgres il tempo di completare l'inizializzazione del database
           sleep 10 
 
       - name: Setup di Node.js
@@ -29,7 +38,7 @@ jobs:
         with:
           node-version: 24
           cache: 'npm'
-          cache-dependency-path: './backend/package-lock.json' # Ora funzionerà perché lo tracciamo!
+          cache-dependency-path: './backend/package-lock.json'
 
       - name: Installazione dipendenze Backend
         run: |
@@ -37,13 +46,6 @@ jobs:
           npm ci
 
       - name: Esecuzione Test Sanitick Backend (Unit & E2E)
-        env:
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_USERNAME: sanitick_test_user
-          DATABASE_PASSWORD: sanitick_test_password
-          DATABASE_NAME: sanitick_test_db
-          JWT_SECRET: chiave_segreta_finta_per_i_test_di_sanitick_2026
         run: |
           cd backend
           npm run test
@@ -72,5 +74,4 @@ jobs:
       - name: Esecuzione Test Angular (Vitest)
         run: |
           cd frontend
-          # Diciamo a Vitest di fare un solo ciclo di test senza rimanere in ascolto (--watch=false)
           npm run test -- --watch=false
