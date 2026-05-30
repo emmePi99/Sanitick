@@ -1,0 +1,53 @@
+name: Sanitick CI - Automated Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      # Passiamo le variabili hardcodate direttamente a Docker Compose.
+      # Docker le intercetta dal sistema operativo del runner e le inietta nel DB di test.
+      - name: Avvia il Database di Test (Postgres)
+        env:
+          POSTGRES_USER: sanitick_test_user
+          POSTGRES_PASSWORD: sanitick_test_password
+          POSTGRES_DB: sanitick_test_db
+        run: |
+          docker compose up -d
+          # Diamo a Postgres 10 secondi per completare l'inizializzazione interna
+          sleep 10 
+
+      - name: Setup di Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './backend/package-lock.json'
+
+      - name: Installazione dipendenze Backend
+        run: |
+          cd backend
+          npm ci
+
+      # Passiamo le STESSE variabili hardcodate a NestJS, così sa come connettersi a localhost
+      - name: Esecuzione Test Sanitick (Unit & E2E)
+        env:
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_USERNAME: sanitick_test_user
+          DATABASE_PASSWORD: sanitick_test_password
+          DATABASE_NAME: sanitick_test_db
+          JWT_SECRET: chiave_segreta_finta_per_i_test_di_sanitick_2026
+        run: |
+          cd backend
+          npm run test
+          npm run test:e2e
