@@ -2,16 +2,14 @@ name: Sanitick CI - Automated Testing
 
 on:
   push:
-    branches: [main]
+    branches: [main, implement_mailer]
   pull_request:
     branches: [main]
 
 jobs:
-  # --- JOB 1: TEST DEL BACKEND (NESTJS) ---
   backend-tests:
     runs-on: ubuntu-latest
 
-    # SPOSTATE QUI: Ora queste variabili sono visibili sia a Docker che a NestJS!
     env:
       POSTGRES_USER: sanitick_test_user
       POSTGRES_PASSWORD: sanitick_test_password
@@ -55,7 +53,6 @@ jobs:
           npm run test
           npm run test:e2e
 
-  # --- JOB 2: TEST DEL FRONTEND (ANGULAR) ---
   frontend-tests:
     runs-on: ubuntu-latest
 

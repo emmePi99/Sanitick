@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserCoreService } from './user-core.service';
-import { User } from '../../entity/user/user.entity';
+import { UserCoreService } from 'src/modules/core/user/service/user/user-core.service';
+import { User } from 'src/modules/core/user/entity/user/user.entity';
 import { UserRole } from '@shared';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('UserCoreService', () => {
   let service: UserCoreService;
@@ -22,10 +23,20 @@ describe('UserCoreService', () => {
 
   const mockUserRepository = {
     findOne: jest.fn(),
+    findOneBy: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
+    metadata: {
+      connection: {
+        options: {
+          type: 'postgres',
+        },
+      },
+      columns: [],
+      relations: [],
+    },
   };
 
   beforeEach(async () => {
@@ -35,6 +46,13 @@ describe('UserCoreService', () => {
         {
           provide: getRepositoryToken(User),
           useValue: mockUserRepository,
+        },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -50,7 +68,7 @@ describe('UserCoreService', () => {
   describe('findOneById', () => {
     it('should return a user if found', async () => {
       mockUserRepository.findOne.mockResolvedValue(mockUser);
-      const result = await service.findOneBy({id: 'uuid'});
+      const result = await service.findOne({ where: { id: 'uuid' } });
       expect(result).toEqual(mockUser);
       expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 'uuid' } });
     });

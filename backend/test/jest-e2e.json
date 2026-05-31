@@ -7,7 +7,8 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "^@shared$": "<rootDir>/../shared/index.ts",
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^@shared$": "<rootDir>/../shared/index",
     "^@shared/(.*)$": "<rootDir>/../shared/$1"
   }
 }
