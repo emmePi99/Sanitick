@@ -63,7 +63,7 @@ Il testing è inteso come parte integrante e continua del ciclo di sviluppo (CI/
   - _Area Paziente:_ Dashboard intuitiva con filtri di ricerca per data e specializzazione medica. Calendario interattivo che mostra esclusivamente gli orari di inizio effettivamente liberi e calcolati al volo dal backend.
   - _Area Medico/Admin:_ Interfaccia per la gestione del `DoctorSchedule` (configurazione e aggiornamento del proprio template orario settimanale) e visualizzazione dell'agenda degli appuntamenti. Pannello Admin dedicato alla compilazione del form di onboarding dei medici (generazione combinata dei dati User + Doctor).
   - _Area Superadmin:_ Pannello di amministrazione utenti complessivo con pulsante "Impersona" per avviare la sessione simulata.
-- [ ] **Gestione UI della Concorrenza:** Implementazione di un sistema di notifica visiva reattiva (es. modale di avviso o toast bloccante) che scatta non appena l'interceptor cattura l'errore `409 Conflict`. Se un paziente prova a confermare uno spazio temporale occupato da un altro utente un istante prima, il sistema lo informerà in modo chiaro, annullerà l'operazione e forzerà il refresh immediato della lista degli orari disponibili.
+- [x] **Gestione UI della Concorrenza:** Implementazione di un sistema di notifica visiva reattiva (es. modale di avviso o toast bloccante) che scatta non appena l'interceptor cattura l'errore `409 Conflict`. Se un paziente prova a confermare uno spazio temporale occupato da un altro utente un istante prima, il sistema lo informerà in modo chiaro, annullerà l'operazione e forzerà il refresh immediato della lista degli orari disponibili.
 
 ### 🧪 Fase 5: Validazione, Tracciamento e Testing Avanzato
 

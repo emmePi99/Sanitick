@@ -8,10 +8,11 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { NotificationService } from '../services/notification.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private notificationService: NotificationService) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -32,8 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 409) {
-          // Handle Overbooking Conflict (to be implemented)
-          console.error('Overbooking conflict detected:', error);
+          this.notificationService.showError('Conflitto di prenotazione: lo slot è stato occupato da un altro utente. Riprova.');
         }
         return throwError(() => error);
       })

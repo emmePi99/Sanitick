@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { UserRole } from '@shared';
 
 interface JwtPayload {
@@ -15,7 +17,23 @@ interface JwtPayload {
 export class AuthService {
   private readonly TOKEN_KEY = 'accessToken';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
+
+  login(credentials: { email: string; password: string }): Observable<{ accessToken: string }> {
+    return this.http.post<{ accessToken: string }>('/api/auth/login', credentials).pipe(
+      tap(response => {
+        localStorage.setItem(this.TOKEN_KEY, response.accessToken);
+      })
+    );
+  }
+
+  register(data: { email: string; firstName: string; lastName: string; fiscalCode: string }): Observable<void> {
+    return this.http.post<void>('/api/auth/register', data);
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
 
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
