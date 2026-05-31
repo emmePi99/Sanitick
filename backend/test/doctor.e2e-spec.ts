@@ -44,7 +44,7 @@ describe('DoctorController (e2e)', () => {
   });
 
   describe('POST /doctor', () => {
-    it('should create a doctor with valid admin token', () => {
+    it('should create a doctor with valid admin token and trigger email', async () => {
       const doctorData = {
         email: 'doctor@test.com',
         firstName: 'Doctor',
@@ -55,11 +55,20 @@ describe('DoctorController (e2e)', () => {
         registrationNumber: '12345',
       };
 
-      return request(app.getHttpServer())
+      const mailerService = app.get(MailerService);
+
+      await request(app.getHttpServer())
         .post('/doctor')
         .set('Authorization', `Bearer ${adminToken}`)
         .send(doctorData)
         .expect(201);
+      
+      expect(mailerService.sendDoctorInvitation).toHaveBeenCalledWith(
+        doctorData.email,
+        doctorData.firstName,
+        doctorData.lastName,
+        expect.any(String)
+      );
     });
 
     it('should fail without authorization', () => {

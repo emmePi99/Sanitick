@@ -47,11 +47,16 @@ describe('AuthController (e2e)', () => {
   };
 
   describe('/auth/register (POST)', () => {
-    it('should register a new user', async () => {
-      return request(app.getHttpServer())
+    it('should register a new user and trigger email', async () => {
+      const mailerService = app.get(MailerService);
+      const spy = jest.spyOn(mailerService, 'sendActivationEmail');
+
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send(testUser)
         .expect(201);
+      
+      expect(spy).toHaveBeenCalledWith(testUser.email, expect.any(String));
     });
   });
 
