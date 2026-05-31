@@ -57,7 +57,7 @@ describe('AuthService', () => {
       mockUserCoreService.findOneBy.mockResolvedValue(null);
       mockUserCoreService.create.mockResolvedValue({ id: '1', email: 'test@test.com' });
       const result = await service.register({ email: 'test@test.com', fiscalCode: 'FISC123' } as any);
-      expect(result).toEqual({ id: '1', email: 'test@test.com' });
+      expect(result).toBeUndefined();
       expect(mockUserCoreService.create).toHaveBeenCalled();
     });
   });
