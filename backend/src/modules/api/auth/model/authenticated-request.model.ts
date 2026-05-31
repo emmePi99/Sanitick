@@ -1,5 +1,6 @@
-import { User } from "src/modules/core/user/entity/user/user.entity";
+import { User } from '../../../core/user/entity/user/user.entity';
+import { AccessTokenUser } from './access-token-user.model';
 
 export interface AuthenticatedRequest extends Request {
-  user: Exclude<User, { id: string, email: string, }>;
+  user: User & AccessTokenUser;
 }

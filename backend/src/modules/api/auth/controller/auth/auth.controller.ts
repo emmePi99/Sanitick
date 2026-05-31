@@ -16,6 +16,7 @@ import { Roles } from '../../decorator/roles.decorator';
 import { UserRole } from '@shared';
 import { ChangePasswordDto } from '../../dto/auth/change-password.dto';
 import { UpdateResult } from 'typeorm';
+import type { AuthenticatedRequest } from '../../model/authenticated-request.model';
 
 @Controller('auth')
 export class AuthController {
@@ -43,7 +44,7 @@ export class AuthController {
   @Roles(UserRole.SUPERADMIN)
   @HttpCode(HttpStatus.OK)
   async impersonate(
-    @Req() req: any,
+    @Req() req: AuthenticatedRequest,
     @Body('targetUserId') targetUserId: string,
   ) {
     return this.authService.impersonate(req.user.id, targetUserId);

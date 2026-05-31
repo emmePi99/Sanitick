@@ -1,32 +1,32 @@
 import { 
   Entity, 
-  PrimaryGeneratedColumn, 
   Column, 
   ManyToOne, 
-  CreateDateColumn, 
-  UpdateDateColumn,
-  Exclusion 
+  Exclusion, 
+  JoinColumn
 } from 'typeorm';
 import { User } from '../../../user/entity/user/user.entity';
-// Importa l'entità Doctor (assicurati che il percorso sia corretto)
 import { Doctor } from '../../../doctor/entity/doctor/doctor.entity'; 
 import { BookingStatus } from '@shared';
+import { BaseEntity } from 'src/modules/shared/entity/base-entity.entity';
 
 @Entity('booking')
-// 🚀 Il cuore dell'anti-overbooking: il vincolo EXCLUDE di PostgreSQL
-@Exclusion(`USING gist ("doctorId" WITH =, tsrange("startTime", "endTime") WITH &&)`)
-export class Booking {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+@Exclusion(`USING gist ("doctor_id" WITH =, tsrange("startTime", "endTime") WITH &&)`)
+export class Booking extends BaseEntity {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'patient_id' })
   patient: User;
 
-  // Nuova relazione: colleghiamo la prenotazione direttamente al medico
+  @Column({ name: 'patient_id' })
+  patientId: string;
+
   @ManyToOne(() => Doctor, (doctor) => doctor.bookings, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
 
-  // I limiti temporali effettivi della visita (sostituiscono lo Slot)
+  @Column({name: 'doctor_id'})
+  doctorId: string;
+
   @Column({ type: 'timestamp' })
   startTime: Date;
 
@@ -39,10 +39,4 @@ export class Booking {
     default: BookingStatus.PENDING,
   })
   status: BookingStatus;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

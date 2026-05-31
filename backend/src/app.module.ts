@@ -15,6 +15,7 @@ import { DoctorSchedule } from './modules/core/doctor-schedule/entity/doctor-sch
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MailerModule } from './modules/core/mailer/mailer.module';
 import { DoctorModule } from './modules/api/doctor/doctor.module';
+import { BookingModule } from './modules/api/booking/booking.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { DoctorModule } from './modules/api/doctor/doctor.module';
     UserCoreModule,
     DoctorCoreModule,
     BookingCoreModule,
+    BookingModule,
     AuthModule,
     DoctorScheduleModule,
     MailerModule,

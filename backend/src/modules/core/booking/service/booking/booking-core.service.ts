@@ -4,6 +4,7 @@ import { Repository, Between } from 'typeorm';
 import { Booking } from '../../entity/booking/booking.entity';
 import { TypeOrmCrudService } from '@dataui/crud-typeorm';
 import dayjs from 'dayjs';
+import { CreateBookingDto } from 'src/modules/api/booking/dto/create-booking.dto';
 
 @Injectable()
 export class BookingCoreService extends TypeOrmCrudService<Booking> {
@@ -22,5 +23,9 @@ export class BookingCoreService extends TypeOrmCrudService<Booking> {
             startTime: Between(startOfDay, endOfDay) 
         } 
     });
+  }
+
+  async createBooking(bookingData: CreateBookingDto, patientId: string): Promise<Booking> {
+    return this.repo.save({ ...bookingData, patientId });
   }
 }

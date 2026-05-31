@@ -1,12 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, BeforeInsert } from 'typeorm';
 import { UserRole } from '@shared';
 import { bildActivationTokenAndTokenExpires } from '../../util/user.util';
+import { BaseEntity } from 'src/modules/shared/entity/base-entity.entity';
 
 @Entity('user')
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
@@ -41,12 +39,6 @@ export class User {
 
   @Column({ type: 'timestamp', nullable: true })
   activationTokenExpires: Date | null;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @BeforeInsert()
   generateActivationToken() {

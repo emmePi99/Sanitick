@@ -6,89 +6,92 @@ The primary source of architectural and implementation details is the `piano_imp
 
 ## 🛠️ Tech Stack & Architecture
 
-*   **Frontend:** Angular & TypeScript (Single Page Application)
-*   **Backend:** NestJS, TypeORM, and Node.js
-*   **Database:** PostgreSQL, containerized via Docker.
-*   **Core Concepts:**
-    *   **Standalone System:** Manages its own user, doctor, and availability records.
-    *   **Role-Based Access Control (RBAC):** Implements a 4-level access model (Patient, Doctor, Admin, Superadmin).
-    *   **Optimistic Locking:** Used to manage booking concurrency and prevent overbooking.
+- **Frontend:** Angular & TypeScript (Single Page Application)
+- **Backend:** NestJS, TypeORM, and Node.js
+- **Database:** PostgreSQL, containerized via Docker.
+- **Shared Library:** Monorepo/Workspace folder `@shared` located at the project root level (peer to `backend` and `frontend`).
+- **Core Concepts:**
+  - **Standalone System:** Manages its own user, doctor, and availability records.
+  - **Role-Based Access Control (RBAC):** Implements a 4-level access model (Patient, Doctor, Admin, Superadmin).
+  - **Optimistic Locking:** Used to manage booking concurrency and prevent overbooking via TypeORM's `@VersionColumn`.
 
-## 🚀 Building and Running
-
-The project relies on Docker to run the necessary services, primarily the PostgreSQL database. The source code for the frontend and backend has not been initialized yet.
-
-### Database
-
-The PostgreSQL database is defined in `docker-compose.yaml`. To run the database:
-
-```shell
-# Start the PostgreSQL container in detached mode
-docker-compose up -d
-```
-
-*   The database will be available on `localhost:5332`.
-*   Credentials and database name are configured via environment variables (e.g., in a `.env` file).
-
-### Backend (NestJS)
-
-*TODO: Add instructions for starting the backend server once it's set up.*
-
-```shell
-# Example (once implemented)
-# cd backend
-# npm install
-# npm run start:dev
-```
-
-### Frontend (Angular)
-
-*TODO: Add instructions for starting the frontend application once it's set up.*
-
-```shell
-# Example (once implemented)
-# cd frontend
-# npm install
-# ng serve
-```
+---
 
 ## 📝 Development Conventions
 
-*   **Core Modules Constraint:** Modules located in `src/modules/core/` **MUST NOT** import other modules. They should be purely domain-focused and handle internal logic/entities only. This enforces strict separation of concerns and prevents circular dependencies. If cross-module logic or orchestration is needed, use an API-level module (e.g., `src/modules/api/`) to import the necessary core services and coordinate them.
-*   **Shared Interfaces:** A common repository or monorepo library should be used for Data Transfer Objects (DTOs) and TypeScript interfaces to ensure data contracts are synchronized between the frontend and backend.
-*   **Database Migrations:** Use TypeORM's migration tool to manage database schema changes. Manual schema alterations should be avoided.
-*   **API Security:** Authentication is based on Passport.js with JWTs. API routes are protected using a `RolesGuard` for RBAC.
-*   **Data Validation:** Use `class-validator` and `class-transformer` in NestJS DTOs to validate all incoming data.
-*   **Concurrency Handling:** The backend must correctly handle `OptimisticLockVersionMismatchError` from TypeORM and return a `409 Conflict` status code, which the frontend will use to notify the user.
-
-# Istruzioni di Sviluppo e Linee Guida per gli Agenti AI
-
-Questo documento contiene regole architetturali e di stile tassative per lo sviluppo del backend di Sanitick (NestJS / TypeScript). Tu, in quanto agente AI, devi rispettare rigorosamente queste direttive in ogni frammento di codice generato o modificato.
+- **Core Modules Constraint:** Modules located in `src/modules/core/` **MUST NOT** import other modules. They should be purely domain-focused and handle internal logic/entities only. If cross-module logic or orchestration is needed, use an API-level module (e.g., `src/modules/api/`) to import the necessary core services and coordinate them.
+- **Shared Alias (`@shared`):** The shared folder is located in the root of the workspace. In the backend, it is mapped via TypeScript paths. NEVER replace `@shared` with relative paths (e.g., `../../../../shared`) inside the source code, as it breaks module mapping during E2E testing environments.
+- **Database Migrations:** Use TypeORM's migration tool to manage database schema changes. Manual schema alterations should be avoided.
+- **API Security:** Authentication is based on Passport.js with JWTs. API routes are protected using a `RolesGuard` for RBAC.
+- **Data Validation:** Use `class-validator` and `class-transformer` in NestJS DTOs to validate all incoming data at the controller level.
+- **Concurrency Handling:** The backend must correctly handle `OptimisticLockVersionMismatchError` from TypeORM and return a `409 Conflict` status code, which the frontend will use to notify the user.
+- **Case Sensitivity (Linux/CI Compliance):** Filenames and folder names must be strictly lowercase or follow precise camelCase/kebab-case. Remember that GitHub Actions/GitLab CI environments run on Linux (case-sensitive), while development might happen on Windows (case-insensitive). Avoid mismatching casing in imports.
 
 ---
 
-## 1. Architettura dei Moduli e Dipendenze Circolari
+# 🤖 Istruzioni di Sviluppo e Linee Guida per gli Agenti AI
+
+Questo documento contiene regole architetturali, di stile e di testing tassative per lo sviluppo di Sanitick. Tu, in quanto agente AI, devi rispettare rigorosamente queste direttive in ogni frammento di codice generato o modified.
+
+## 1. 🧪 Politica di Sviluppo: Test-Driven & Completeness
+
+Non considerare MAI una funzionalità, un metodo o un endpoint como "completato" se non è accompagnato dalla sua suite di test completa. Per ogni nuovo metodo, controller, servizio o utility che implementi o modifichi, devi generare automaticamente i relativi file di test seguendo queste linee guida tassative:
+
+### Requisiti di Copertura dei Test
+
+- **Test Unitari (`.spec.ts`):** Ogni micro-funzionalità o metodo deve avere una copertura totale della logica di business. Copri esplicitamente:
+  - **Happy Path:** Il comportamento atteso con input validi e ideali.
+  - **Edge Cases:** Input vuoti, stringhe malformate, record non trovati, array vuoti, conflitti di orario.
+  - **Error Handling:** Verifica che le eccezioni vengano sollevate correttamente (es. l'intercettazione di un errore di validazione o di un `ConflictException`).
+- **Test E2E (`.e2e-spec.ts`):** Se implementi un nuovo endpoint API (Controller), devi creare o aggiornare il relativo test End-to-End dentro la cartella `test/` per verificare l'intero ciclo Request/Response, inclusi i codici di stato HTTP (200, 201, 400, 409, ecc.) e l'effettiva persistenza a database.
+
+### Standard di Scrittura dei Test
+
+- **Isolamento nei Test Unitari:** Usa sempre i Mock e gli Spy (tramite Jest) per isolare il modulo sotto test. Non dipendere mai da istanze reali del database o di altri servizi nei file `.spec.ts`.
+- **Iniezione dei Path nei Test E2E:** Quando scrivi o configuri i test E2E, tieni a mente che la `rootDir` di Jest E2E è impostata sulla root del backend (`..`). Gli alias verso il modulo `@shared` globale si risolvono tramite `"^@shared$": "<rootDir>/../shared/index.ts"`. Non usare mai percorsi relativi per forzare la risoluzione degli alias.
+- **Struttura AAA:** Organizza ogni test secondo il pattern _Arrange-Act-Assert_ (Prepara, Agisci, Verifica), separando i blocchi logici con una riga vuota per la massima leggibilità.
+
+### Workflow di Risposta dell'IA
+
+Quando ti viene chiesto di scrivere codice, la tua risposta deve **sempre** includere:
+
+1. Il codice sorgente aggiornato e pulito.
+2. I relativi file di test unitari/E2E pronti all'uso.
+
+---
+
+## 2. Architettura dei Moduli e Dipendenze Circolari
 
 Per prevenire ed evitare problemi di dipendenze circolari (Circular Dependencies), l'architettura segue una regola rigida sull'isolamento del Core:
 
-- **Definizione dei Moduli Core:** I moduli definiti come "Core" sono posizionati all'interno della cartella `src/modules/core/` e contengono la parola `core` nel loro nome (es. `user-core.service.ts`, `mailer.service.ts` dentro la struttura core).
-- **Regola di Importazione:** I moduli Core **NON devono MAI importare altri moduli** (né moduli API, né altri moduli esterni all'infuori delle librerie di terze parti strettamente necessarie o di utility pure). 
-- **Flusso consentito:** Sono gli altri moduli (come i moduli in `src/modules/api/`) a poter importare ed estendere i moduli Core, mai il contrario.
+- **Definizione dei Moduli Core:** I moduli Core sono posizionati all'interno della cartella `src/modules/core/` (es. `user-core`, `slot-core`).
+- **Regola di Importazione:** I moduli Core **NON devono MAI importare altri moduli**. Sono entità isolate che gestiscono solo il proprio dominio.
+- **Flusso consentito:** Sono i moduli API (in `src/modules/api/`) a importare ed estendere i moduli Core per orchestrare le funzionalità complesse (es. l'orchestrazione tra `Auth` e `UserCore`).
 
-*Se ti viene richiesto di implementare una feature in un modulo Core che richiede funzionalità di un altro modulo, segnalalo come violazione architetturale invece di procedere con l'import.*
+_Se ti viene richiesto di implementare una feature in un modulo Core che richiede funzionalità di un altro modulo, segnalalo come violazione architetturale invece di procedere con l'import._
 
 ---
 
-## 2. Best Practices di Programmazione e Stile del Codice
+## 3. Best Practices di Programmazione e Stile del Codice
 
-Devi seguire SEMPRE le migliori pratiche di programmazione relative a TypeScript, NestJS e al Clean Code. In particolare, sono applicate le seguenti restrizioni tassative sul codice TypeScript:
-
-- **NO `any`:** L'uso del tipo `any` è severamente vietato. Ogni variabile, parametro, valore di ritorno o proprietà deve essere tipizzato esplicitamente. Se un tipo non è noto o è dinamico, valuta l'uso di `unknown`, di una `interface` o di un `type` generico, ma mai `any`.
-- **NO Type Assertion (`as`):** È vietato l'uso dell'operatore di type assertion `as` (es. `const user = data as User`). Le asserzioni aggirano il compilatore e nascondono potenziali bug. Utilizza il type-checking nativo, i Type Guard (funzioni `is`), o la validazione dei dati a runtime (es. `class-validator` con i DTO di NestJS).
+- **NO `any`:** L'uso del tipo `any` è severamente vietato. Ogni variabile, parametro, valore di ritorno o proprietà deve essere tipizzato esplicitamente. Se un tipo non è noto o è dinamico, utilizza `unknown` o i Generics (`<T>`).
+- **NO Type Assertion (`as`):** È vietato l'uso di `as` (es. `data as User`). Utilizza il type-checking nativo, i Type Guard (funzioni `is`), o la validazione dei dati a runtime tramite i DTO.
+- **Manipolazione delle Date sicura:** Quando manipoli orari e date (es. per la generazione degli slot medici partendo dalle `doctorSchedule`), evita manipolazioni manuali di stringhe tramite `split(':')` o `parseInt`. Utilizza sempre i metodi nativi di **Day.js** (o simili) sfruttando i formati ISO o i metodi di impostazione oraria dell'oggetto (es. `dayjs(\`${dateStr}T\${schedule.startTime}:00\`)`).
 
 ### Esempi di conformità:
 
 ❌ **SBAGLIATO (Non generare MAI codice così):**
+
 ```typescript
 const data: any = await this.service.getData();
 const userId = (data as MyDataType).id;
+const hour = parseInt(schedule.startTime.split(":")[0]);
+```
+
+✔️ CORRETTO (Genera codice seguendo questo standard):
+
+```typescript
+const data: MyDataType = await this.service.getData();
+const userId = data.id;
+const currentTime = targetDate.hour(startHours).minute(startMinutes).second(0);
+```
