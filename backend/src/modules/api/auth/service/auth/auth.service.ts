@@ -30,7 +30,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<User> {
+  async register(registerDto: RegisterDto): Promise<void> {
     const alreadyExisistingUserFIndOptionsWhere = buildAlreadyExistingUserFindOptionsWhere(registerDto.email, registerDto.fiscalCode);
     const existingUser = await this.userCoreService.findOneBy(alreadyExisistingUserFIndOptionsWhere);
 
@@ -38,7 +38,7 @@ export class AuthService {
       throw new MailOrCfConflictException();
     }
 
-    return this.userCoreService.create(registerDto);
+    await this.userCoreService.create(registerDto);
   }
 
   async changePassword(changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {

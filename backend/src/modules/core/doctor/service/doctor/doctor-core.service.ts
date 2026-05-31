@@ -22,7 +22,7 @@ export class DoctorCoreService extends TypeOrmCrudService<Doctor> {
     super(doctorRepository);
   }
 
-  async createDoctorWithUser(dto: CreateDoctorDto) {
+  async createDoctorWithUser(dto: CreateDoctorDto): Promise<void> {
     const alreadyExisistingUserFIndOptionsWhere = buildAlreadyExistingUserFindOptionsWhere(dto.email, dto.fiscalCode);
     const alreadySavedDoctor = await this.doctorRepository.findOneBy({ user: alreadyExisistingUserFIndOptionsWhere }); 
 
@@ -53,7 +53,5 @@ export class DoctorCoreService extends TypeOrmCrudService<Doctor> {
         savedDoctor.user.activationToken,
       ),
     );
-
-    return savedDoctor;
   }
 }
