@@ -3,6 +3,7 @@ import { MailerListener } from './mailer.listener';
 import { MailerService } from 'src/modules/core/mailer/service/mailer/mailer.service';
 import { UserCreatedEvent } from 'src/modules/core/user/event/user-created.event';
 import { DoctorCreatedEvent } from 'src/modules/core/doctor/events/doctor-created.event';
+import { Logger } from '@nestjs/common';
 
 describe('MailerListener', () => {
   let listener: MailerListener;
@@ -19,7 +20,9 @@ describe('MailerListener', () => {
         MailerListener,
         { provide: MailerService, useValue: mockMailerService },
       ],
-    }).compile();
+    })
+    .setLogger(new Logger())
+    .compile();
 
     listener = module.get<MailerListener>(MailerListener);
     mailerService = module.get<MailerService>(MailerService);

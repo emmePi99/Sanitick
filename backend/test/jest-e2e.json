@@ -10,5 +10,6 @@
     "^src/(.*)$": "<rootDir>/src/$1",
     "^@shared$": "<rootDir>/../shared/index",
     "^@shared/(.*)$": "<rootDir>/../shared/$1"
-  }
+  },
+  "setupFiles": ["<rootDir>/test/setup-e2e.ts"]
 }

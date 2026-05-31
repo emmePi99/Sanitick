@@ -11,14 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      POSTGRES_USER: sanitick_test_user
-      POSTGRES_PASSWORD: sanitick_test_password
-      POSTGRES_DB: sanitick_test_db
-      DATABASE_HOST: localhost
-      DATABASE_PORT: 5432
-      DATABASE_USERNAME: sanitick_test_user
-      DATABASE_PASSWORD: sanitick_test_password
-      DATABASE_NAME: sanitick_test_db
+      DB_HOST: localhost
+      DB_PORT: 5433
+      DB_USER: postgres_test
+      DB_PASSWORD: password_test
+      DB_NAME: sanitick_test
+      DB_LOGGING: 'false'
       JWT_SECRET: chiave_segreta_finta_per_i_test_di_sanitick_2026
 
     steps:
@@ -27,10 +25,10 @@ jobs:
 
       - name: Avvia il Database di Test (Postgres)
         run: |
-          docker compose up -d
+          docker compose -f docker-compose.test.yml up -d
           # Attendi che Postgres sia pronto ad accettare connessioni
           echo "In attesa che il database Postgres sia pronto..."
-          until docker compose exec -T db pg_isready -U $POSTGRES_USER -d $POSTGRES_DB; do
+          until docker compose -f docker-compose.test.yml exec -T db_test pg_isready -U $DB_USER -d $DB_NAME; do
             sleep 2
           done
           echo "Database pronto!"
@@ -46,6 +44,17 @@ jobs:
         run: |
           cd backend
           npm ci
+
+      - name: Genera .env.test
+        run: |
+          cd backend
+          echo "DB_HOST=$DB_HOST" > .env.test
+          echo "DB_PORT=$DB_PORT" >> .env.test
+          echo "DB_USER=$DB_USER" >> .env.test
+          echo "DB_PASSWORD=$DB_PASSWORD" >> .env.test
+          echo "DB_NAME=$DB_NAME" >> .env.test
+          echo "DB_LOGGING=$DB_LOGGING" >> .env.test
+          echo "NODE_ENV=test" >> .env.test
 
       - name: Esecuzione Test Sanitick Backend (Unit & E2E)
         run: |
