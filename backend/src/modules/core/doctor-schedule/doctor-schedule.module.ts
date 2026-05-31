@@ -6,5 +6,6 @@ import { DoctorSchedule } from './entity/doctor-schedule.entity';
 @Module({
   providers: [DoctorScheduleCoreService],
   imports: [TypeOrmModule.forFeature([DoctorSchedule])],
+  exports: [DoctorScheduleCoreService],
 })
 export class DoctorScheduleModule {}
