@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
 import { UserRole } from '@shared';
+import { bildActivationTokenAndTokenExpires } from '../../util/user.util';
 
 @Entity('user')
 export class User {
@@ -36,14 +37,21 @@ export class User {
   isActive: boolean;
 
   @Column({ type: 'varchar', nullable: true })
-  activationToken: string;
+  activationToken: string | null;
 
   @Column({ type: 'timestamp', nullable: true })
-  activationTokenExpires: Date;
+  activationTokenExpires: Date | null;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  generateActivationToken() {
+    const tokenAndExpires = bildActivationTokenAndTokenExpires();
+    this.activationToken = tokenAndExpires.activationToken;
+    this.activationTokenExpires = tokenAndExpires.activationTokenExpires;
+  }
 }

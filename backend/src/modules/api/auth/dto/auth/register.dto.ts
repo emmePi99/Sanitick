@@ -2,21 +2,13 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
-  MinLength,
-  IsEnum,
-  IsOptional,
   Length,
   Matches,
 } from 'class-validator';
-import { UserRole } from '@shared';
 
 export class RegisterDto {
   @IsEmail()
   email: string;
-
-  @IsString()
-  @MinLength(8)
-  password: string;
 
   @IsString()
   @IsNotEmpty()
@@ -33,8 +25,4 @@ export class RegisterDto {
     message: 'Il formato del codice fiscale non è valido',
   })
   fiscalCode: string;
-
-  @IsEnum(UserRole)
-  @IsOptional()
-  role?: UserRole;
 }

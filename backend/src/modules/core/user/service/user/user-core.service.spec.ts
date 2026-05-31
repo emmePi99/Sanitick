@@ -50,7 +50,7 @@ describe('UserCoreService', () => {
   describe('findOneById', () => {
     it('should return a user if found', async () => {
       mockUserRepository.findOne.mockResolvedValue(mockUser);
-      const result = await service.findOneById('uuid');
+      const result = await service.findOneBy({id: 'uuid'});
       expect(result).toEqual(mockUser);
       expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 'uuid' } });
     });

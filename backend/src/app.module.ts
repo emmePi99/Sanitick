@@ -12,6 +12,9 @@ import { BookingCoreModule } from './modules/core/booking/booking-core.module';
 import { DoctorCoreModule } from './modules/core/doctor/doctor-core.module';
 import { UserCoreModule } from './modules/core/user/user-core.module';
 import { DoctorSchedule } from './modules/core/doctor-schedule/entity/doctor-schedule.entity';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { MailerModule } from './modules/core/mailer/mailer.module';
+import { DoctorModule } from './modules/api/doctor/doctor.module';
 
 @Module({
   imports: [
@@ -34,11 +37,14 @@ import { DoctorSchedule } from './modules/core/doctor-schedule/entity/doctor-sch
         logging: true,
       }),
     }),
+    EventEmitterModule.forRoot(),
     UserCoreModule,
     DoctorCoreModule,
     BookingCoreModule,
     AuthModule,
     DoctorScheduleModule,
+    MailerModule,
+    DoctorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

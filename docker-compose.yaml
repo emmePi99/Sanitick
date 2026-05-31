@@ -10,7 +10,7 @@ services:
     volumes:
       - db:/data/postgres
     ports:
-      - "5332:5432"
+      - "${POSTGRES_PORT}:5432"
     networks:
       - db
     restart: unless-stopped
@@ -26,6 +26,13 @@ services:
       - "8080:8080"
     networks:
       - db
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_UI_PORT}:8025"
+      - "${SMTP_PORT}:1025"
 
 networks:
   db:
