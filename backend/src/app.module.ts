@@ -34,7 +34,7 @@ import { DoctorModule } from './modules/api/doctor/doctor.module';
         database: configService.get<string>('POSTGRES_DB'),
         entities: [User, Doctor, Booking, DoctorSchedule],
         synchronize: false,
-        logging: true,
+        logging: configService.get<boolean>('POSTGRES_LOGGING'),
       }),
     }),
     EventEmitterModule.forRoot(),

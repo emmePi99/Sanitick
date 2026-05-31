@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
   synchronize: false,
-  logging: true,
+  logging: (process.env.POSTGRES_LOGGING === 'true' ? true : (process.env.POSTGRES_LOGGING === 'all' ? 'all' : false)),
   entities: [User, Doctor, Booking, DoctorSchedule],
   migrations: ['src/database/migrations/*.ts'],
   subscribers: [],
