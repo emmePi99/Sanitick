@@ -34,6 +34,6 @@ describe('SetPasswordComponent', () => {
       password: 'password123',
       confirmPassword: 'password456'
     });
-    expect(component.setPasswordForm.valid).toBeFalse();
+    expect(component.setPasswordForm.valid).toBe(false);
   });
 });

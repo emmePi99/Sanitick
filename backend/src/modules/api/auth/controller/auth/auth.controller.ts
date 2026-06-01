@@ -30,11 +30,8 @@ export class AuthController {
 
   @Post('set-password')
   @HttpCode(HttpStatus.OK)
-  async setPassword(@Body() setPasswordDto: { token: string; password: string }): Promise<UpdateResult> {
-    return await this.authService.setPassword({
-      token: setPasswordDto.token,
-      password: setPasswordDto.password
-    });
+  async setPassword(@Body() setPasswordDto: ChangePasswordDto): Promise<UpdateResult> {
+    return await this.authService.setPassword(setPasswordDto);
   }
 
   @Post('login')

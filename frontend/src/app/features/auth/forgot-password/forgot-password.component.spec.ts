@@ -21,12 +21,12 @@ describe('ForgotPasswordComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should invalidate the form when email is empty', () => {
-    expect(component.forgotForm.valid).toBeFalse();
+  it('should invalidate the form when empty', () => {
+    expect(component.forgotForm.valid).toBe(false);
   });
 
   it('should validate the form when email is correct', () => {
     component.forgotForm.setValue({ email: 'test@example.com' });
-    expect(component.forgotForm.valid).toBeTrue();
+    expect(component.forgotForm.valid).toBe(true);
   });
 });

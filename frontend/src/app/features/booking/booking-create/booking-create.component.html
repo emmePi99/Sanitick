@@ -1,0 +1,24 @@
+<div class="search-container">
+  <h2>Prenota una visita</h2>
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Seleziona Medico</mat-label>
+      <mat-select formControlName="doctorId">
+        <mat-option *ngFor="let doctor of doctors()" [value]="doctor.id">
+          {{ doctor.user.firstName }} {{ doctor.user.lastName }} - {{ doctor.specialization }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Data</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="searchForm.invalid" class="full-width">
+      Cerca disponibilità
+    </button>
+  </form>
+</div>

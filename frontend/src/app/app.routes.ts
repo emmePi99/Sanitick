@@ -8,7 +8,9 @@ export const routes: Routes = [
     component: MainLayout,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard/dashboard.component').then(m => m.DashboardComponent) }
+      { path: '', redirectTo: 'booking', pathMatch: 'full' },
+      { path: 'booking', loadComponent: () => import('./features/booking/booking-list/bookings.component').then(m => m.BookingsComponent) },
+      { path: 'booking/new', loadComponent: () => import('./features/booking/booking-create/booking-create.component').then(m => m.BookingCreateComponent) }
     ],
   },
   { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) },

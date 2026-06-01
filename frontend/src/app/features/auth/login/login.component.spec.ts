@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
+import { provideRouter } from '@angular/router';
 
 describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginComponent]
+      imports: [LoginComponent],
+      providers: [provideRouter([])]
     }).compileComponents();
   });
 
@@ -18,6 +20,8 @@ describe('LoginComponent', () => {
     const fixture = TestBed.createComponent(LoginComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Login');
+    const title = compiled.querySelector('mat-card-title');
+    expect(title).toBeTruthy();
+    expect(title?.textContent).toContain('Accedi a Sanitick');
   });
 });

@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <div class="header-actions">
+    <h1>Le tue prenotazioni</h1>
+    <button mat-raised-button color="primary" routerLink="/booking/new">
+      <mat-icon>add</mat-icon>
+      Nuova Prenotazione
+    </button>
+  </div>
+  <table mat-table [dataSource]="bookings()" class="mat-elevation-z8">
+    <ng-container matColumnDef="doctor">
+      <th mat-header-cell *matHeaderCellDef> Medico </th>
+      <td mat-cell *matCellDef="let element"> {{ element.doctor.user.firstName }} {{ element.doctor.user.lastName }} </td>
+    </ng-container>
+    <ng-container matColumnDef="startTime">
+      <th mat-header-cell *matHeaderCellDef> Data e Ora </th>
+      <td mat-cell *matCellDef="let element"> {{ element.startTime | date:'short' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Stato </th>
+      <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

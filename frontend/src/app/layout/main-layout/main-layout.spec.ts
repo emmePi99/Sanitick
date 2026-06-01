@@ -22,6 +22,6 @@ describe('MainLayout', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('mat-toolbar')).toBeTruthy();
-    expect(compiled.querySelector('mat-toolbar')?.textContent).toContain('Sanitick');
+    expect(compiled.querySelector('.title')?.textContent).toContain('Sanitick');
   });
 });

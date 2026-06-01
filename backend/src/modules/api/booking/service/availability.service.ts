@@ -38,6 +38,25 @@ export class AvailabilityService {
     return availableSlots;
   }
 
+  async getAvailableDates(
+    doctorId: string,
+    year: number,
+    month: number,
+    duration: number
+  ): Promise<string[]> {
+    const daysInMonth = dayjs(`${year}-${month}-01`).daysInMonth();
+    const availableDates: string[] = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = dayjs(`${year}-${month}-${day}`).format('YYYY-MM-DD');
+      const slots = await this.getAvailableSlots(doctorId, dateStr, duration);
+      if (slots.length > 0) {
+        availableDates.push(dateStr);
+      }
+    }
+    return availableDates;
+  }
+
   private extractAvailableSlotFromSchedule(
     targetDate: dayjs.Dayjs,
     schedule: DoctorSchedule,

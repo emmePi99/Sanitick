@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -9,7 +10,8 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegisterComponent, ReactiveFormsModule, NoopAnimationsModule]
+      imports: [RegisterComponent, ReactiveFormsModule, NoopAnimationsModule],
+      providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);
@@ -22,7 +24,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should invalidate the form when empty', () => {
-    expect(component.registerForm.valid).toBeFalse();
+    expect(component.registerForm.valid).toBe(false);
   });
 
   it('should validate the form when inputs are correct', () => {
@@ -32,6 +34,6 @@ describe('RegisterComponent', () => {
       email: 'john@example.com',
       fiscalCode: 'ABCDEF12G34H567I'
     });
-    expect(component.registerForm.valid).toBeTrue();
+    expect(component.registerForm.valid).toBe(true);
   });
 });

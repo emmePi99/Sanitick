@@ -1,0 +1,20 @@
+@use 'styles/variables' as v;
+@use '../../auth/auth-shared' as auth;
+
+.search-container { 
+    @include auth.auth-container;
+    flex-direction: column;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: v.$space-13;
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: v.$space-21;
+    border-radius: 8px;
+}
+
+.full-width { width: 100%; }

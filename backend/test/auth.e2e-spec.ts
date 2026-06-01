@@ -60,15 +60,15 @@ describe('AuthController (e2e)', () => {
     });
   });
 
-  describe('/auth/change-password (POST)', () => {
+  describe('/auth/set-password (POST)', () => {
     it('should successfully change password with valid token', async () => {
       const user = await dataSource.query(`SELECT "activationToken" FROM "user" WHERE "email" = '${testUser.email}'`);
       const token = user[0].activationToken;
 
       return request(app.getHttpServer())
-        .post('/auth/change-password')
+        .post('/auth/set-password')
         .send({ token, password: 'NewPassword123!' })
-        .expect(201);
+        .expect(200);
     });
 
     it('should fail with empty password', async () => {
@@ -76,14 +76,14 @@ describe('AuthController (e2e)', () => {
         const token = user[0]?.activationToken || 'some-token';
   
         return request(app.getHttpServer())
-          .post('/auth/change-password')
+          .post('/auth/set-password')
           .send({ token, password: '' })
           .expect(400);
       });
 
     it('should fail with invalid token', () => {
       return request(app.getHttpServer())
-        .post('/auth/change-password')
+        .post('/auth/set-password')
         .send({ token: 'invalid-token', password: 'NewPassword123!' })
         .expect(404);
     });

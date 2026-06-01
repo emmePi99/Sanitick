@@ -1,0 +1,16 @@
+@use 'styles/variables' as v;
+
+.dashboard-container {
+  padding: v.$space-21;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: v.$space-21;
+}
+
+table {
+  width: 100%;
+}

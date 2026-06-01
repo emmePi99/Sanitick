@@ -18,9 +18,12 @@ html {
 }
 
 // Reset base e font
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: v.$color-background;
+  background-color: v.$color-layout-background;
   color: v.$color-text;
 }

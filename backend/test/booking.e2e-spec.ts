@@ -31,7 +31,7 @@ describe('BookingController (e2e)', () => {
     patientToken = await jwtService.signAsync({ sub: patientId, email: 'patient@test.com', role: UserRole.PATIENT });
 
     const doctorUser = await dataSource.query(`INSERT INTO "user" (email, "firstName", "lastName", "fiscalCode", role, "isActive", password) VALUES ('doctor@test.com', 'Doctor', 'User', 'DOCTORCF12345678', 'doctor', true, 'hashedpassword') RETURNING id`);
-    const doctor = await dataSource.query(`INSERT INTO "doctor" ("specialization", "registrationNumber", "clinicAddress", "userId") VALUES ('CARDIOLOGY', '123', 'Address', '${doctorUser[0].id}') RETURNING id`);
+    const doctor = await dataSource.query(`INSERT INTO "doctor" ("specialization", "registrationNumber", "clinicAddress", "user_id") VALUES ('CARDIOLOGY', '123', 'Address', '${doctorUser[0].id}') RETURNING id`);
     doctorId = doctor[0].id;
   });
 
