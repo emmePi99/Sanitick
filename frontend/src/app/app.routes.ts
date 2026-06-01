@@ -13,5 +13,6 @@ export const routes: Routes = [
     ]
   },
   { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) },
-  { path: 'register', loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent) }
+  { path: 'register', loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent) },
+  { path: 'set-password/:token', loadComponent: () => import('./features/auth/set-password/set-password.component').then(m => m.SetPasswordComponent) }
 ];

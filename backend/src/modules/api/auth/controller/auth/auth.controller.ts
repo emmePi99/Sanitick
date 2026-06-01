@@ -28,9 +28,13 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Post('change-password')
-  async changePassword(@Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
-    return await this.authService.changePassword(changePasswordDto);
+  @Post('set-password')
+  @HttpCode(HttpStatus.OK)
+  async setPassword(@Body() setPasswordDto: { token: string; password: string }): Promise<UpdateResult> {
+    return await this.authService.setPassword({
+      token: setPasswordDto.token,
+      password: setPasswordDto.password
+    });
   }
 
   @Post('login')

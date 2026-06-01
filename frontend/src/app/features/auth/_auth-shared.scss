@@ -1,0 +1,10 @@
+@use 'styles/variables' as v;
+
+@mixin auth-container { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: v.$space-21; 
+    background-color: v.$color-auth-background; 
+}

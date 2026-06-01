@@ -13,7 +13,7 @@ describe('AuthController', () => {
 
   const mockAuthService = {
     register: jest.fn(),
-    changePassword: jest.fn(),
+    setPassword: jest.fn(),
     login: jest.fn(),
     impersonate: jest.fn(),
   };
@@ -46,11 +46,11 @@ describe('AuthController', () => {
     });
   });
 
-  describe('changePassword', () => {
-    it('should call authService.changePassword', async () => {
-      const dto: ChangePasswordDto = { token: 'token', password: 'password' };
-      await controller.changePassword(dto);
-      expect(authService.changePassword).toHaveBeenCalledWith(dto);
+  describe('setPassword', () => {
+    it('should call authService.setPassword', async () => {
+      const dto = { token: 'token', password: 'password' };
+      await controller.setPassword(dto);
+      expect(authService.setPassword).toHaveBeenCalledWith(dto);
     });
   });
 

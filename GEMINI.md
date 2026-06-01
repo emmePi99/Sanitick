@@ -74,6 +74,7 @@ _Se ti viene richiesto di implementare una feature in un modulo Core che richied
 
 ## 3. Best Practices di Programmazione e Stile del Codice
 
+- **Angular Signals:** ALWAYS use Angular Signals (e.g., `signal`, `computed`, `effect`) for UI state management to ensure fine-grained reactivity and optimal performance. Avoid using plain class variables for state that drives UI updates.
 - **NO `any`:** L'uso del tipo `any` è severamente vietato. Ogni variabile, parametro, valore di ritorno o proprietà deve essere tipizzato esplicitamente. Se un tipo non è noto o è dinamico, utilizza `unknown` o i Generics (`<T>`).
 - **NO Type Assertion (`as`):** È vietato l'uso di `as` (es. `data as User`). Utilizza il type-checking nativo, i Type Guard (funzioni `is`), o la validazione dei dati a runtime tramite i DTO.
 - **Manipolazione delle Date sicura:** Quando manipoli orari e date (es. per la generazione degli slot medici partendo dalle `doctorSchedule`), evita manipolazioni manuali di stringhe tramite `split(':')` o `parseInt`. Utilizza sempre i metodi nativi di **Day.js** (o simili) sfruttando i formati ISO o i metodi di impostazione oraria dell'oggetto (es. `dayjs(\`${dateStr}T\${schedule.startTime}:00\`)`).

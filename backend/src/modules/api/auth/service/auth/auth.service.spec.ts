@@ -84,40 +84,39 @@ describe('AuthService', () => {
       expect(result).toEqual({ accessToken: 'token' });
     });
   });
-
-  describe('changePassword', () => {
-    it('should throw NotFoundException if token is invalid', async () => {
-      mockUserCoreService.findOneBy.mockResolvedValue(null);
-      await expect(service.changePassword({ token: 'invalid', password: 'new' }))
-        .rejects.toThrow(NotFoundException);
-    });
-
-    it('should throw BadRequestException if token is expired', async () => {
-      mockUserCoreService.findOneBy.mockResolvedValue({ 
-        id: '1', 
-        activationTokenExpires: dayjs().subtract(1, 'hour').toDate() 
-      });
-      await expect(service.changePassword({ token: 'expired', password: 'new' }))
-        .rejects.toThrow(BadRequestException);
-    });
-
-    it('should update password and return UpdateResult', async () => {
-      mockUserCoreService.findOneBy.mockResolvedValue({ 
-        id: '1', 
-        activationTokenExpires: dayjs().add(1, 'hour').toDate() 
-      });
-      (bcrypt.hash as jest.Mock).mockResolvedValue('newhashed');
-      mockUserCoreService.update.mockResolvedValue({ affected: 1 });
-      
-      const result = await service.changePassword({ token: 'valid', password: 'new' });
-      expect(result).toEqual({ affected: 1 });
-      expect(mockUserCoreService.update).toHaveBeenCalledWith('1', expect.objectContaining({
-        password: 'newhashed',
-        isActive: true,
-        activationToken: null,
-      }));
-    });
+describe('setPassword', () => {
+  it('should throw NotFoundException if token is invalid', async () => {
+    mockUserCoreService.findOneBy.mockResolvedValue(null);
+    await expect(service.setPassword({ token: 'invalid', password: 'new' }))
+      .rejects.toThrow(NotFoundException);
   });
+
+  it('should throw BadRequestException if token is expired', async () => {
+    mockUserCoreService.findOneBy.mockResolvedValue({
+      id: '1',
+      activationTokenExpires: dayjs().subtract(1, 'hour').toDate()
+    });
+    await expect(service.setPassword({ token: 'expired', password: 'new' }))
+      .rejects.toThrow(BadRequestException);
+  });
+
+  it('should update password and return UpdateResult', async () => {
+    mockUserCoreService.findOneBy.mockResolvedValue({
+      id: '1',
+      activationTokenExpires: dayjs().add(1, 'hour').toDate()
+    });
+    mockUserCoreService.update.mockResolvedValue({ affected: 1 });
+    (bcrypt.hash as jest.Mock).mockResolvedValue('newhashed');
+
+    const result = await service.setPassword({ token: 'valid', password: 'new' });
+    expect(result).toEqual({ affected: 1 });
+    expect(mockUserCoreService.update).toHaveBeenCalledWith('1', expect.objectContaining({
+      password: 'newhashed',
+      isActive: true,
+      activationToken: null,
+    }));
+  });
+});
 
   describe('impersonate', () => {
     it('should throw NotFoundException if target user not found', async () => {

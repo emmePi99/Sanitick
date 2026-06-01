@@ -34,6 +34,10 @@ export class AuthService {
     return this.http.post<void>(`${this.apiUrl}/register`, data);
   }
 
+  setPassword(token: string, password: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/set-password`, { token, password });
+  }
+
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
   }
