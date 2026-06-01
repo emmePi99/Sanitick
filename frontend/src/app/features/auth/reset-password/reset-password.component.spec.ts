@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ResetPassword } from './reset-password';
+import { ResetPasswordComponent } from './reset-password.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('ResetPassword Component', () => {
-  let component: ResetPassword;
-  let fixture: ComponentFixture<ResetPassword>;
+describe('ResetPasswordComponent', () => {
+  let component: ResetPasswordComponent;
+  let fixture: ComponentFixture<ResetPasswordComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResetPassword, ReactiveFormsModule, NoopAnimationsModule]
+      imports: [ResetPasswordComponent, ReactiveFormsModule, NoopAnimationsModule]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ResetPassword);
+    fixture = TestBed.createComponent(ResetPasswordComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

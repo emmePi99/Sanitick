@@ -8,10 +8,10 @@ export const routes: Routes = [
     component: MainLayout,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard) },
+      { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       // Altre rotte protette
     ]
   },
-  { path: 'login', loadComponent: () => import('./features/login/login').then(m => m.Login) },
-  { path: 'register', loadComponent: () => import('./features/auth/register').then(m => m.Register) }
+  { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent) }
 ];

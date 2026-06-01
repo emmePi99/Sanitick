@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Activate } from './activate';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivateComponent } from './activate.component';
 
-describe('Activate Component', () => {
-  let component: Activate;
-  let fixture: ComponentFixture<Activate>;
+describe('ActivateComponent', () => {
+  let component: ActivateComponent;
+  let fixture: ComponentFixture<ActivateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Activate, NoopAnimationsModule],
+      imports: [ActivateComponent, NoopAnimationsModule],
       providers: [
         {
           provide: ActivatedRoute,
@@ -19,11 +19,10 @@ describe('Activate Component', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Activate);
+    fixture = TestBed.createComponent(ActivateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });

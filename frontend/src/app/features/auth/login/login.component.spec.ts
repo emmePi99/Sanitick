@@ -1,23 +1,23 @@
 import { TestBed } from '@angular/core/testing';
-import { Dashboard } from './dashboard';
+import { LoginComponent } from './login.component';
 
-describe('Dashboard', () => {
+describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Dashboard]
+      imports: [LoginComponent]
     }).compileComponents();
   });
 
   it('should create the component', () => {
-    const fixture = TestBed.createComponent(Dashboard);
+    const fixture = TestBed.createComponent(LoginComponent);
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
 
   it('should render correct title', () => {
-    const fixture = TestBed.createComponent(Dashboard);
+    const fixture = TestBed.createComponent(LoginComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Dashboard Paziente');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Login');
   });
 });

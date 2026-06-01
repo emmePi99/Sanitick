@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Register } from './register';
+import { RegisterComponent } from './register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('Register Component', () => {
-  let component: Register;
-  let fixture: ComponentFixture<Register>;
+describe('RegisterComponent', () => {
+  let component: RegisterComponent;
+  let fixture: ComponentFixture<RegisterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Register, ReactiveFormsModule, NoopAnimationsModule]
+      imports: [RegisterComponent, ReactiveFormsModule, NoopAnimationsModule]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Register);
+    fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -30,8 +30,7 @@ describe('Register Component', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
-      codiceFiscale: 'ABCDEF12G34H567I',
-      password: 'password123'
+      fiscalCode: 'ABCDEF12G34H567I'
     });
     expect(component.registerForm.valid).toBeTrue();
   });

@@ -10,24 +10,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   selector: 'app-forgot-password',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatCardModule, MatFormFieldModule],
-  template: `
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Recupera Password</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="forgotForm" (ngSubmit)="onSubmit()">
-          <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email">
-          </mat-form-field>
-          <button mat-raised-button color="primary" type="submit" [disabled]="forgotForm.invalid">Invia link di reset</button>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  `
+  templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.scss'
 })
-export class ForgotPassword {
+export class ForgotPasswordComponent {
   forgotForm: FormGroup;
 
   constructor(private fb: FormBuilder) {

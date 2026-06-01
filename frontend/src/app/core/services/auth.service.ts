@@ -11,16 +11,19 @@ interface JwtPayload {
   impersonatorId?: string;
 }
 
+import { environment } from '../../../environments/environment';
+// ...
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'accessToken';
+  private readonly apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   login(credentials: { email: string; password: string }): Observable<{ accessToken: string }> {
-    return this.http.post<{ accessToken: string }>('/api/auth/login', credentials).pipe(
+    return this.http.post<{ accessToken: string }>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.accessToken);
       })
@@ -28,7 +31,7 @@ export class AuthService {
   }
 
   register(data: { email: string; firstName: string; lastName: string; fiscalCode: string }): Observable<void> {
-    return this.http.post<void>('/api/auth/register', data);
+    return this.http.post<void>(`${this.apiUrl}/register`, data);
   }
 
   logout(): void {

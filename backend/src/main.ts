@@ -11,6 +11,7 @@ async function bootstrap() {
     transform: true,
   }));
   app.useGlobalFilters(new BookingConflictFilter());
+  app.enableCors(); // Enable CORS
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

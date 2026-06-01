@@ -7,16 +7,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'app-activate',
   standalone: true,
   imports: [CommonModule, MatProgressSpinnerModule],
-  template: `
-    <div class="activation-container">
-      <h1>Attivazione Account</h1>
-      <mat-spinner *ngIf="loading"></mat-spinner>
-      <p *ngIf="!loading && success">Account attivato con successo!</p>
-      <p *ngIf="!loading && !success">Errore durante l'attivazione.</p>
-    </div>
-  `
+  templateUrl: './activate.component.html',
+  styleUrl: './activate.component.scss'
 })
-export class Activate {
+export class ActivateComponent {
   loading = true;
   success = false;
 
