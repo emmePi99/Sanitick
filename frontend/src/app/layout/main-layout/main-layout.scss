@@ -1,6 +1,30 @@
-.sidenav-container {
-  height: 100%;
+@use 'styles/variables' as v;
+
+.main-container {
+  min-height: 100vh;
+  background-color: v.$color-layout-background;
 }
-.content {
-  padding: 21px;
+
+.sidenav {
+  width: 200px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.header {
+  height: 64px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 v.$space-21;
+}
+
+.title {
+  font-weight: bold;
+  color: v.$color-primary;
+}
+
+.content-wrapper {
+  padding: v.$space-21;
 }
