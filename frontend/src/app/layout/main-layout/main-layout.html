@@ -1,13 +1,14 @@
 <div class="main-container">
-  <header class="header">
+  <mat-toolbar class="header" color="primary">
     <div class="header-left">
       <img src="favicon.svg" alt="Sanitick Logo" class="logo">
       <span class="title">Sanitick</span>
     </div>
+    <span class="spacer"></span>
     <button mat-icon-button (click)="logout()" aria-label="Logout">
       <mat-icon>logout</mat-icon>
     </button>
-  </header>
+  </mat-toolbar>
   <main class="content-wrapper">
     <router-outlet></router-outlet>
   </main>

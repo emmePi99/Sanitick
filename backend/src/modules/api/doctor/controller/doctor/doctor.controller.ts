@@ -16,7 +16,7 @@ import { Doctor } from 'src/modules/core/doctor/entity/doctor/doctor.entity';
         join: {
             user: {
                 eager: true,
-                select: ['id', 'firstName', 'lastName'],
+                allow: ['id', 'firstName', 'lastName'],
             },
         },
     },

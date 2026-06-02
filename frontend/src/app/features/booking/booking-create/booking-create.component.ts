@@ -7,7 +7,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { DoctorService, Doctor } from '../../../core/services/doctor.service';
+import { DoctorService, Doctor } from '@core/services/doctor.service';
 
 @Component({
   selector: 'app-booking-create',
