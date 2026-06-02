@@ -7,12 +7,16 @@ import { DoctorSchedule } from '../../entity/doctor-schedule.entity';
 @Injectable()
 export class DoctorScheduleCoreService extends TypeOrmCrudService<DoctorSchedule> {
   constructor(
-    @InjectRepository(DoctorSchedule) protected readonly repo: Repository<DoctorSchedule>
+    @InjectRepository(DoctorSchedule)
+    protected readonly repo: Repository<DoctorSchedule>,
   ) {
     super(repo);
   }
 
-  async findByDoctorAndDay(doctorId: string, dayOfWeek: number): Promise<DoctorSchedule[]> {
+  async findByDoctorAndDay(
+    doctorId: string,
+    dayOfWeek: number,
+  ): Promise<DoctorSchedule[]> {
     return this.repo.find({ where: { doctor: { id: doctorId }, dayOfWeek } });
   }
 }

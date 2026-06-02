@@ -11,30 +11,34 @@ export class MailerListener {
   constructor(private readonly mailerService: MailerService) {}
 
   @OnEvent(UserCreatedEvent.KEY, { async: true })
-  handleUserCreatedEvent(event: UserCreatedEvent) {
+  async handleUserCreatedEvent(event: UserCreatedEvent): Promise<void> {
     if (!event.token) {
-        this.logger.error("token mancante nel payload dell'evento UserCreatedEvent. Mail non inviata", event);
-        return;
+      this.logger.error(
+        "token mancante nel payload dell'evento UserCreatedEvent. Mail non inviata",
+        event,
+      );
+      return;
     }
     try {
-      this.mailerService.sendActivationEmail(event.email, event.token);
-      this.logger.log(
-        `Inviata email di attivazione a ${event.email}`,
-      );
+      await this.mailerService.sendActivationEmail(event.email, event.token);
+      this.logger.log(`Inviata email di attivazione a ${event.email}`);
     } catch (error) {
       this.logger.error(`Errore invio a ${event.email}:`, error);
     }
   }
 
   @OnEvent(DoctorCreatedEvent.KEY, { async: true })
-  async handleDoctorCreatedEvent(event: DoctorCreatedEvent) {
+  async handleDoctorCreatedEvent(event: DoctorCreatedEvent): Promise<void> {
     this.logger.log(
       `Ricevuto evento creazione per il Dott. ${event.lastName} (${event.email})`,
     );
 
     if (!event.token) {
-        this.logger.error("token mancante nel payload dell'evento DoctorCreatedEvent. Mail non inviata", event);
-        return;
+      this.logger.error(
+        "token mancante nel payload dell'evento DoctorCreatedEvent. Mail non inviata",
+        event,
+      );
+      return;
     }
 
     try {

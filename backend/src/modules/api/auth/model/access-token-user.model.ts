@@ -1,6 +1,8 @@
+import { UserRole } from '@shared';
+
 export interface AccessTokenUser {
-    sub: string;
-    email: string;
-    role: string;
-    impersonatorId?: string;
+  sub: string;
+  email: string;
+  role: UserRole;
+  impersonatorId?: string;
 }

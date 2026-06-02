@@ -21,8 +21,8 @@ describe('MailerListener', () => {
         { provide: MailerService, useValue: mockMailerService },
       ],
     })
-    .setLogger(new Logger())
-    .compile();
+      .setLogger(new Logger())
+      .compile();
 
     listener = module.get<MailerListener>(MailerListener);
     mailerService = module.get<MailerService>(MailerService);
@@ -36,17 +36,20 @@ describe('MailerListener', () => {
   describe('handleUserCreatedEvent', () => {
     it('should call sendActivationEmail if token is present', async () => {
       const event = new UserCreatedEvent('test@test.com', 'token');
-      
+
       await listener.handleUserCreatedEvent(event);
-      
-      expect(mailerService.sendActivationEmail).toHaveBeenCalledWith('test@test.com', 'token');
+
+      expect(mailerService.sendActivationEmail).toHaveBeenCalledWith(
+        'test@test.com',
+        'token',
+      );
     });
 
     it('should not call sendActivationEmail if token is missing', async () => {
       const event = new UserCreatedEvent('test@test.com', null);
-      
+
       await listener.handleUserCreatedEvent(event);
-      
+
       expect(mailerService.sendActivationEmail).not.toHaveBeenCalled();
     });
 
@@ -55,7 +58,7 @@ describe('MailerListener', () => {
       mockMailerService.sendActivationEmail.mockImplementation(() => {
         throw new Error('SMTP Error');
       });
-      
+
       // Should not throw, but since it is not async, it will throw immediately if not handled.
       // But handleUserCreatedEvent has a try-catch.
       expect(() => listener.handleUserCreatedEvent(event)).not.toThrow();
@@ -69,16 +72,16 @@ describe('MailerListener', () => {
         'test@test.com',
         'firstName',
         'lastName',
-        'token'
+        'token',
       );
-      
+
       await listener.handleDoctorCreatedEvent(event);
-      
+
       expect(mailerService.sendDoctorInvitation).toHaveBeenCalledWith(
         'test@test.com',
         'firstName',
         'lastName',
-        'token'
+        'token',
       );
     });
 
@@ -87,11 +90,11 @@ describe('MailerListener', () => {
         'test@test.com',
         'firstName',
         'lastName',
-        null
+        null,
       );
-      
+
       await listener.handleDoctorCreatedEvent(event);
-      
+
       expect(mailerService.sendDoctorInvitation).not.toHaveBeenCalled();
     });
 
@@ -100,11 +103,15 @@ describe('MailerListener', () => {
         'test@test.com',
         'firstName',
         'lastName',
-        'token'
+        'token',
       );
-      mockMailerService.sendDoctorInvitation.mockRejectedValue(new Error('SMTP Error'));
-      
-      await expect(listener.handleDoctorCreatedEvent(event)).resolves.not.toThrow();
+      mockMailerService.sendDoctorInvitation.mockRejectedValue(
+        new Error('SMTP Error'),
+      );
+
+      await expect(
+        listener.handleDoctorCreatedEvent(event),
+      ).resolves.not.toThrow();
       expect(mailerService.sendDoctorInvitation).toHaveBeenCalled();
     });
   });

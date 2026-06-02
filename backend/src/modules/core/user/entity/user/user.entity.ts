@@ -18,9 +18,9 @@ export class User extends BaseEntity {
   @Column()
   lastName: string;
 
-  @Column({ 
-    length: 16, 
-    unique: true 
+  @Column({
+    length: 16,
+    unique: true,
   })
   fiscalCode: string;
 

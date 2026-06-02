@@ -59,13 +59,19 @@ describe('RolesGuard', () => {
 
   it('should return true if user has required role', () => {
     const context = createMockContext({ role: UserRole.DOCTOR });
-    (reflector.getAllAndOverride as jest.Mock).mockReturnValue([UserRole.DOCTOR, UserRole.ADMIN]);
+    (reflector.getAllAndOverride as jest.Mock).mockReturnValue([
+      UserRole.DOCTOR,
+      UserRole.ADMIN,
+    ]);
     expect(guard.canActivate(context as ExecutionContext)).toBe(true);
   });
 
   it('should return false if user does not have required role', () => {
     const context = createMockContext({ role: UserRole.PATIENT });
-    (reflector.getAllAndOverride as jest.Mock).mockReturnValue([UserRole.DOCTOR, UserRole.ADMIN]);
+    (reflector.getAllAndOverride as jest.Mock).mockReturnValue([
+      UserRole.DOCTOR,
+      UserRole.ADMIN,
+    ]);
     expect(guard.canActivate(context as ExecutionContext)).toBe(false);
   });
 });

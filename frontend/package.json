@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "generate-api": "openapi-generator-cli generate -i http://localhost:3000/api/docs-json -g typescript-angular -o src/app/core/generated --additional-properties=providedInRoot=true --skip-validate-spec"
   },
   "prettier": {
     "printWidth": 100,
@@ -39,6 +40,7 @@
     "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.0",
+    "@openapitools/openapi-generator-cli": "^2.34.0",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

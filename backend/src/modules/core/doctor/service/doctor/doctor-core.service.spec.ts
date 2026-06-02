@@ -61,9 +61,15 @@ describe('DoctorCoreService', () => {
   describe('findOneById', () => {
     it('should return a doctor if found', async () => {
       mockDoctorRepository.findOne.mockResolvedValue(mockDoctor);
-      const result = await service.findOne({ where: { id: 'uuid-doc' }, relations: { user: true } });
+      const result = await service.findOne({
+        where: { id: 'uuid-doc' },
+        relations: { user: true },
+      });
       expect(result).toEqual(mockDoctor);
-      expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 'uuid-doc' }, relations: { user: true } });
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { id: 'uuid-doc' },
+        relations: { user: true },
+      });
     });
   });
 });

@@ -7,7 +7,13 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+} from '@nestjs/swagger';
 import { AuthService } from '../../service/auth/auth.service';
 import { RegisterDto } from '../../dto/auth/register.dto';
 import { LoginDto } from '../../dto/auth/login.dto';
@@ -16,7 +22,6 @@ import { RolesGuard } from '../../guard/roles.guard';
 import { Roles } from '../../decorator/roles.decorator';
 import { UserRole } from '@shared';
 import { ChangePasswordDto } from '../../dto/auth/change-password.dto';
-import { UpdateResult } from 'typeorm';
 import type { AuthenticatedRequest } from '../../model/authenticated-request.model';
 
 @ApiTags('auth')
@@ -28,7 +33,10 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register a new patient' })
   @ApiResponse({ status: 201, description: 'Patient registered successfully' })
-  @ApiResponse({ status: 409, description: 'Email or Codice Fiscale already exists' })
+  @ApiResponse({
+    status: 409,
+    description: 'Email or Codice Fiscale already exists',
+  })
   async register(@Body() registerDto: RegisterDto): Promise<void> {
     return this.authService.register(registerDto);
   }
@@ -37,8 +45,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Set password for account activation' })
   @ApiResponse({ status: 200, description: 'Password set successfully' })
-  async setPassword(@Body() setPasswordDto: ChangePasswordDto): Promise<UpdateResult> {
-    return await this.authService.setPassword(setPasswordDto);
+  async setPassword(@Body() setPasswordDto: ChangePasswordDto): Promise<void> {
+    await this.authService.setPassword(setPasswordDto);
   }
 
   @Post('login')

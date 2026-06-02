@@ -7,7 +7,10 @@ import { CreateDoctorDto } from 'src/modules/api/doctor/dto/create-doctor.dto';
 import { DoctorCreatedEvent } from 'src/modules/core/doctor/events/doctor-created.event';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MailOrCfConflictException } from 'src/modules/api/auth/exception/mail-or-cf-conflict.exception';
-import { bildActivationTokenAndTokenExpires, buildAlreadyExistingUserFindOptionsWhere } from 'src/modules/core/user/util/user.util';
+import {
+  bildActivationTokenAndTokenExpires,
+  buildAlreadyExistingUserFindOptionsWhere,
+} from 'src/modules/core/user/util/user.util';
 import { UserRole } from '@shared/index';
 
 @Injectable()
@@ -23,8 +26,11 @@ export class DoctorCoreService extends TypeOrmCrudService<Doctor> {
   }
 
   async createDoctorWithUser(dto: CreateDoctorDto): Promise<void> {
-    const alreadyExisistingUserFIndOptionsWhere = buildAlreadyExistingUserFindOptionsWhere(dto.email, dto.fiscalCode);
-    const alreadySavedDoctor = await this.doctorRepository.findOneBy({ user: alreadyExisistingUserFIndOptionsWhere }); 
+    const alreadyExisistingUserFIndOptionsWhere =
+      buildAlreadyExistingUserFindOptionsWhere(dto.email, dto.fiscalCode);
+    const alreadySavedDoctor = await this.doctorRepository.findOneBy({
+      user: alreadyExisistingUserFIndOptionsWhere,
+    });
 
     if (alreadySavedDoctor) {
       throw new MailOrCfConflictException();
@@ -40,11 +46,11 @@ export class DoctorCoreService extends TypeOrmCrudService<Doctor> {
         lastName: dto.lastName,
         fiscalCode: dto.fiscalCode,
         role: UserRole.DOCTOR,
-        ...bildActivationTokenAndTokenExpires()
-      }
+        ...bildActivationTokenAndTokenExpires(),
+      },
     });
 
-    this.eventEmitter.emitAsync(
+    await this.eventEmitter.emitAsync(
       DoctorCreatedEvent.KEY,
       new DoctorCreatedEvent(
         savedDoctor.user.email,

@@ -1,7 +1,7 @@
-import { UnauthorizedException } from "@nestjs/common";
+import { UnauthorizedException } from '@nestjs/common';
 
 export class InvalidCredentialException extends UnauthorizedException {
-    constructor() {
-        super('Credenziali non valide');
-    }
+  constructor() {
+    super('Credenziali non valide');
+  }
 }
