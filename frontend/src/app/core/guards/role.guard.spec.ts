@@ -1,13 +1,21 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { roleGuard } from './role.guard';
 import { UserRole } from '@shared';
-import { vi } from 'vitest';
+import { vi, Mock } from 'vitest';
+
+interface MockAuthService {
+  getUserRole: Mock;
+}
+
+interface MockRouter {
+  navigate: Mock;
+}
 
 describe('roleGuard', () => {
-  let authServiceSpy: { getUserRole: any };
-  let routerSpy: { navigate: any };
+  let authServiceSpy: MockAuthService;
+  let routerSpy: MockRouter;
 
   beforeEach(() => {
     authServiceSpy = { getUserRole: vi.fn() };
@@ -23,9 +31,11 @@ describe('roleGuard', () => {
 
   it('should allow navigation if user has required role', () => {
     authServiceSpy.getUserRole.mockReturnValue(UserRole.PATIENT);
-    const route = { data: { roles: [UserRole.PATIENT] } } as unknown as ActivatedRouteSnapshot;
+    const route = new ActivatedRouteSnapshot();
+    route.data = { roles: [UserRole.PATIENT] };
+    const state = { url: '/test' } as unknown as RouterStateSnapshot; // Snapshot is hard to mock
     
-    const result = TestBed.runInInjectionContext(() => roleGuard(route, {} as any));
+    const result = TestBed.runInInjectionContext(() => roleGuard(route, state));
     expect(result).toBe(true);
   });
 

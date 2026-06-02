@@ -10,7 +10,7 @@ const isUserRole = (val: unknown): val is UserRole => {
   return false;
 };
 
-export const roleGuard: CanActivateFn = (route, state) => {
+export const roleGuard: CanActivateFn = (route, _state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   

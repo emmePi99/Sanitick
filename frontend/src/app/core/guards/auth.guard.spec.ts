@@ -1,12 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { authGuard } from './auth.guard';
-import { vi } from 'vitest';
+import { vi, Mock } from 'vitest';
+
+interface MockAuthService {
+  isAuthenticated: Mock;
+}
+
+interface MockRouter {
+  navigate: Mock;
+}
 
 describe('authGuard', () => {
-  let authServiceSpy: { isAuthenticated: any };
-  let routerSpy: { navigate: any };
+  let authServiceSpy: MockAuthService;
+  let routerSpy: MockRouter;
 
   beforeEach(() => {
     authServiceSpy = { isAuthenticated: vi.fn() };
@@ -22,13 +30,21 @@ describe('authGuard', () => {
 
   it('should allow navigation if authenticated', () => {
     authServiceSpy.isAuthenticated.mockReturnValue(true);
-    const result = TestBed.runInInjectionContext(() => authGuard({} as any, {} as any));
+    const mockRoute = {} as ActivatedRouteSnapshot;
+    const mockState = { url: '/test' } as RouterStateSnapshot;
+    const result = TestBed.runInInjectionContext(() => 
+      authGuard(mockRoute, mockState)
+    );
     expect(result).toBe(true);
   });
 
   it('should redirect to login if not authenticated', () => {
     authServiceSpy.isAuthenticated.mockReturnValue(false);
-    const result = TestBed.runInInjectionContext(() => authGuard({} as any, {} as any));
+    const mockRoute = {} as ActivatedRouteSnapshot;
+    const mockState = { url: '/test' } as RouterStateSnapshot;
+    const result = TestBed.runInInjectionContext(() => 
+      authGuard(mockRoute, mockState)
+    );
     expect(result).toBe(false);
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
