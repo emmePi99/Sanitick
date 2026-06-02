@@ -9,6 +9,10 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
+function isErrorWithMessage(obj: unknown): obj is { message: string } {
+  return typeof obj === 'object' && obj !== null && 'message' in obj && typeof (obj as { message: unknown }).message === 'string';
+}
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -46,8 +50,11 @@ export class RegisterComponent {
         error: (err: HttpErrorResponse) => {
           this.isLoading.set(false);
           // Mostra il messaggio di errore dal backend
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          this.errorMessage.set((err.error as { message: string })?.message || 'Si è verificato un errore durante la registrazione.');
+          if (isErrorWithMessage(err.error)) {
+            this.errorMessage.set(err.error.message);
+          } else {
+            this.errorMessage.set('Si è verificato un errore durante la registrazione.');
+          }
           console.error('Registration failed', err);
         }
       });
