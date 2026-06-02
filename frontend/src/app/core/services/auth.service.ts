@@ -78,9 +78,10 @@ export class AuthService {
         return decoded;
       }
       return null;
-    } catch (e) {
+    } catch (_e) {
       return null;
     }
+
   }
 
   private isJwtPayload(data: unknown): data is JwtPayload {

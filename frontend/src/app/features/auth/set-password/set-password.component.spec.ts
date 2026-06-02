@@ -3,7 +3,6 @@ import { SetPasswordComponent } from './set-password.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 
 describe('SetPasswordComponent', () => {
   let component: SetPasswordComponent;

@@ -7,6 +7,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+
+function isErrorWithMessage(obj: unknown): obj is { message: string } {
+  return typeof obj === 'object' && obj !== null && 'message' in obj && typeof (obj as { message: unknown }).message === 'string';
+}
 
 @Component({
   selector: 'app-register',
@@ -42,10 +47,14 @@ export class RegisterComponent {
           this.registrationSuccess.set(true);
           this.isLoading.set(false);
         },
-        error: (err: any) => {
+        error: (err: HttpErrorResponse) => {
           this.isLoading.set(false);
           // Mostra il messaggio di errore dal backend
-          this.errorMessage.set(err?.error?.message || 'Si è verificato un errore durante la registrazione.');
+          if (isErrorWithMessage(err.error)) {
+            this.errorMessage.set(err.error.message);
+          } else {
+            this.errorMessage.set('Si è verificato un errore durante la registrazione.');
+          }
           console.error('Registration failed', err);
         }
       });

@@ -3,26 +3,27 @@
 
 @include mat.core();
 
-// Definizione del tema Material 3 (senza vecchie funzioni M2)
-$sanitick-theme: mat.define-theme((
+// Definizione del tema Material
+$primary-palette: mat.m2-define-palette(mat.$m2-blue-palette);
+$accent-palette: mat.m2-define-palette(mat.$m2-pink-palette);
+$warn-palette: mat.m2-define-palette(mat.$m2-red-palette);
+
+$sanitick-theme: mat.m2-define-light-theme((
   color: (
-    theme-type: light,
-    primary: mat.$cyan-palette,
-    tertiary: mat.$orange-palette
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
   )
 ));
 
 // Applica il tema all'intero documento
-html {
-  @include mat.all-component-themes($sanitick-theme);
-}
+@include mat.all-component-themes($sanitick-theme);
 
 // Reset base e font
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: v.$color-layout-background;
   color: v.$color-text;
