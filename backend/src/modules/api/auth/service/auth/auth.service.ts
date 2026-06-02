@@ -46,7 +46,7 @@ export class AuthService {
 
   async setPassword(
     changePasswordDto: ChangePasswordDto,
-  ): Promise<UpdateResult> {
+  ): Promise<void> {
     const user = await this.userCoreService.findOneBy({
       activationToken: changePasswordDto.token,
     });
@@ -66,7 +66,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(changePasswordDto.password, 10);
 
-    return await this.userCoreService.update(user.id, {
+    await this.userCoreService.update(user.id, {
       password: hashedPassword,
       isActive: true,
       activationToken: null,

@@ -22,7 +22,6 @@ import { RolesGuard } from '../../guard/roles.guard';
 import { Roles } from '../../decorator/roles.decorator';
 import { UserRole } from '@shared';
 import { ChangePasswordDto } from '../../dto/auth/change-password.dto';
-import { UpdateResult } from 'typeorm';
 import type { AuthenticatedRequest } from '../../model/authenticated-request.model';
 
 @ApiTags('auth')
@@ -48,8 +47,8 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Password set successfully' })
   async setPassword(
     @Body() setPasswordDto: ChangePasswordDto,
-  ): Promise<UpdateResult> {
-    return await this.authService.setPassword(setPasswordDto);
+  ): Promise<void> {
+    await this.authService.setPassword(setPasswordDto);
   }
 
   @Post('login')

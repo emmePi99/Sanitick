@@ -133,7 +133,7 @@ describe('AuthService', () => {
         token: 'valid',
         password: 'new',
       });
-      expect(result).toEqual({ affected: 1 });
+      expect(result).toBeUndefined();
       expect(mockUserCoreService.update).toHaveBeenCalledWith(
         '1',
         expect.objectContaining({
