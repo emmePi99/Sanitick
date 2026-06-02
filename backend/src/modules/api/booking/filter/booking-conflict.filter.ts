@@ -14,7 +14,7 @@ export class BookingConflictFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     // Codice 23P01 è Exclusion Violation in PostgreSQL
-    if ((exception as any).code === '23P01') {
+    if (this.isPgError(exception) && exception.code === '23P01') {
       response.status(HttpStatus.CONFLICT).json({
         statusCode: HttpStatus.CONFLICT,
         message:
@@ -28,5 +28,14 @@ export class BookingConflictFilter implements ExceptionFilter {
         message: 'Errore interno del server.',
       });
     }
+  }
+
+  private isPgError(err: unknown): err is { code: string } {
+    return (
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      typeof err.code === 'string'
+    );
   }
 }
