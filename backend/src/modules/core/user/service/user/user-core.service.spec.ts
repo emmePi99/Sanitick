@@ -70,7 +70,9 @@ describe('UserCoreService', () => {
       mockUserRepository.findOne.mockResolvedValue(mockUser);
       const result = await service.findOne({ where: { id: 'uuid' } });
       expect(result).toEqual(mockUser);
-      expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 'uuid' } });
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { id: 'uuid' },
+      });
     });
   });
 
@@ -78,11 +80,13 @@ describe('UserCoreService', () => {
     it('should create and save a user', async () => {
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
-      
+
       const result = await service.create({ email: 'test@example.com' });
-      
+
       expect(result).toEqual(mockUser);
-      expect(repository.create).toHaveBeenCalledWith({ email: 'test@example.com' });
+      expect(repository.create).toHaveBeenCalledWith({
+        email: 'test@example.com',
+      });
       expect(repository.save).toHaveBeenCalledWith(mockUser);
     });
   });

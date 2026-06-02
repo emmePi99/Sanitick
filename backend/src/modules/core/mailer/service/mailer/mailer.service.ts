@@ -15,14 +15,16 @@ export class MailerService {
       tls: {
         rejectUnauthorized: false,
       },
-      ...(smtpUser && smtpPass ? { auth: { user: smtpUser, pass: smtpPass } } : {})
+      ...(smtpUser && smtpPass
+        ? { auth: { user: smtpUser, pass: smtpPass } }
+        : {}),
     });
   }
 
   async sendActivationEmail(email: string, token: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
     const activationLink = `${frontendUrl}/set-password/${token}`;
-    
+
     const fromSender = this.configService.get<string>('SMTP_FROM');
 
     await this.transporter.sendMail({
@@ -39,10 +41,15 @@ export class MailerService {
     });
   }
 
-  async sendDoctorInvitation(email: string, firstName: string, lastName: string, token: string): Promise<void> {
+  async sendDoctorInvitation(
+    email: string,
+    firstName: string,
+    lastName: string,
+    token: string,
+  ): Promise<void> {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
     const setupPasswordLink = `${frontendUrl}/set-password/${token}`;
-    
+
     const fromSender = this.configService.get<string>('SMTP_FROM');
 
     await this.transporter.sendMail({

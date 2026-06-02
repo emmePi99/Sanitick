@@ -17,12 +17,18 @@ export class AvailabilityService {
   async getAvailableSlots(
     doctorId: string,
     date: string,
-    durationInMinutes: number
+    durationInMinutes: number,
   ): Promise<string[]> {
     const targetDate = dayjs(date);
     const dayOfWeek = targetDate.day();
-    const schedules = await this.doctorScheduleCoreService.findByDoctorAndDay(doctorId, dayOfWeek);
-    const bookings = await this.bookingCoreService.findByDoctorAndDate(doctorId, targetDate.toDate());
+    const schedules = await this.doctorScheduleCoreService.findByDoctorAndDay(
+      doctorId,
+      dayOfWeek,
+    );
+    const bookings = await this.bookingCoreService.findByDoctorAndDate(
+      doctorId,
+      targetDate.toDate(),
+    );
     const availableSlots: string[] = [];
 
     for (const schedule of schedules) {
@@ -42,7 +48,7 @@ export class AvailabilityService {
     doctorId: string,
     year: number,
     month: number,
-    duration: number
+    duration: number,
   ): Promise<string[]> {
     const daysInMonth = dayjs(`${year}-${month}-01`).daysInMonth();
     const availableDates: string[] = [];

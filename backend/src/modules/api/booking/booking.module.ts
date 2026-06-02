@@ -5,10 +5,7 @@ import { DoctorScheduleModule } from '../../core/doctor-schedule/doctor-schedule
 import { BookingController } from './controller/booking.controller';
 
 @Module({
-  imports: [
-    BookingCoreModule,
-    DoctorScheduleModule,
-  ],
+  imports: [BookingCoreModule, DoctorScheduleModule],
   controllers: [BookingController],
   providers: [AvailabilityService],
   exports: [AvailabilityService],

@@ -1,10 +1,4 @@
-import { 
-  Entity, 
-  Column, 
-  OneToOne, 
-  JoinColumn, 
-  OneToMany
-} from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { DoctorSpecialization } from '@shared';
 import { User } from 'src/modules/core/user/entity/user/user.entity';
 import { Booking } from 'src/modules/core/booking/entity/booking/booking.entity';
@@ -16,7 +10,7 @@ export class Doctor extends BaseEntity {
   @Column({
     type: 'enum',
     enum: DoctorSpecialization,
-    default: DoctorSpecialization.GENERAL_PRACTICE
+    default: DoctorSpecialization.GENERAL_PRACTICE,
   })
   specialization: DoctorSpecialization;
 

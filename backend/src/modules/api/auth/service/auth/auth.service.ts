@@ -1,7 +1,5 @@
 import {
   Injectable,
-  UnauthorizedException,
-  ConflictException,
   BadRequestException,
   NotFoundException,
   Logger,
@@ -11,7 +9,6 @@ import * as bcrypt from 'bcrypt';
 import { UserCoreService } from '../../../../core/user/service/user/user-core.service';
 import { RegisterDto } from '../../dto/auth/register.dto';
 import { LoginDto } from '../../dto/auth/login.dto';
-import { User } from '../../../../core/user/entity/user/user.entity';
 import { ChangePasswordDto } from '../../dto/auth/change-password.dto';
 import { UpdateResult } from 'typeorm';
 import dayjs from 'dayjs';
@@ -31,8 +28,14 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto): Promise<void> {
-    const alreadyExisistingUserFIndOptionsWhere = buildAlreadyExistingUserFindOptionsWhere(registerDto.email, registerDto.fiscalCode);
-    const existingUser = await this.userCoreService.findOneBy(alreadyExisistingUserFIndOptionsWhere);
+    const alreadyExisistingUserFIndOptionsWhere =
+      buildAlreadyExistingUserFindOptionsWhere(
+        registerDto.email,
+        registerDto.fiscalCode,
+      );
+    const existingUser = await this.userCoreService.findOneBy(
+      alreadyExisistingUserFIndOptionsWhere,
+    );
 
     if (existingUser) {
       throw new MailOrCfConflictException();
@@ -41,20 +44,24 @@ export class AuthService {
     await this.userCoreService.create(registerDto);
   }
 
-  async setPassword(changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
+  async setPassword(
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<UpdateResult> {
     const user = await this.userCoreService.findOneBy({
-      activationToken: changePasswordDto.token
+      activationToken: changePasswordDto.token,
     });
-    
+
     if (!user) {
       throw new NotFoundException('Token non valido o già utilizzato');
     }
 
-    const now = dayjs(); 
+    const now = dayjs();
     const expirationDate = dayjs(user.activationTokenExpires);
 
     if (now.isAfter(expirationDate)) {
-      throw new BadRequestException('Il link è scaduto. Richiedi una nuova email');
+      throw new BadRequestException(
+        'Il link è scaduto. Richiedi una nuova email',
+      );
     }
 
     const hashedPassword = await bcrypt.hash(changePasswordDto.password, 10);
@@ -68,7 +75,9 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {
-    const user = await this.userCoreService.findOneByEmailWithPassword(loginDto.email);
+    const user = await this.userCoreService.findOneByEmailWithPassword(
+      loginDto.email,
+    );
 
     if (!user) {
       throw new InvalidCredentialException();
@@ -82,10 +91,10 @@ export class AuthService {
       throw new InvalidCredentialException();
     }
 
-    const payload: AccessTokenUser = { 
+    const payload: AccessTokenUser = {
       sub: user.id,
-      email: user.email, 
-      role: user.role 
+      email: user.email,
+      role: user.role,
     };
     return {
       accessToken: await this.jwtService.signAsync(payload),
@@ -107,7 +116,7 @@ export class AuthService {
       sub: targetUser.id,
       email: targetUser.email,
       role: targetUser.role,
-      impersonatorId: adminId
+      impersonatorId: adminId,
     };
 
     return {

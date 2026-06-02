@@ -17,15 +17,18 @@ export class BookingCoreService extends TypeOrmCrudService<Booking> {
   async findByDoctorAndDate(doctorId: string, date: Date): Promise<Booking[]> {
     const startOfDay = dayjs(date).startOf('day').toDate();
     const endOfDay = dayjs(date).endOf('day').toDate();
-    return this.repo.find({ 
-        where: { 
-            doctor: { id: doctorId },
-            startTime: Between(startOfDay, endOfDay) 
-        } 
+    return this.repo.find({
+      where: {
+        doctor: { id: doctorId },
+        startTime: Between(startOfDay, endOfDay),
+      },
     });
   }
 
-  async createBooking(bookingData: CreateBookingDto, patientId: string): Promise<Booking> {
+  async createBooking(
+    bookingData: CreateBookingDto,
+    patientId: string,
+  ): Promise<Booking> {
     return this.repo.save({ ...bookingData, patientId });
   }
 }

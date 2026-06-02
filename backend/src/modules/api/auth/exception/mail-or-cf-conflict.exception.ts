@@ -1,4 +1,4 @@
-import { ConflictException } from "@nestjs/common";
+import { ConflictException } from '@nestjs/common';
 
 export class MailOrCfConflictException extends ConflictException {
   constructor() {

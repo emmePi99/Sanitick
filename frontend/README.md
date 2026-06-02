@@ -1,4 +1,16 @@
-# Frontend
+## API Client Generation
+
+This project uses `@openapitools/openapi-generator-cli` to automatically generate Angular services and DTOs from the backend's Swagger documentation.
+
+To update the generated client:
+
+1.  Ensure the backend is running (`npm run start:dev` in the `backend/` directory).
+2.  Run the following command in the `frontend/` directory:
+    ```bash
+    npm run generate-api
+    ```
+
+The generated code will be placed in `src/app/core/generated/`.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
 

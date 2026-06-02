@@ -6,7 +6,7 @@ import { BookingConflictFilter } from './modules/api/booking/filter/booking-conf
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Swagger Configuration
   const config = new DocumentBuilder()
     .setTitle('Sanitick API')
@@ -20,11 +20,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   app.useGlobalFilters(new BookingConflictFilter());
   app.enableCors(); // Enable CORS
   await app.listen(process.env.PORT ?? 3000);

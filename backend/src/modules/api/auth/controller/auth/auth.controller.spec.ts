@@ -3,7 +3,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from 'src/modules/api/auth/service/auth/auth.service';
 import { RegisterDto } from 'src/modules/api/auth/dto/auth/register.dto';
 import { LoginDto } from 'src/modules/api/auth/dto/auth/login.dto';
-import { ChangePasswordDto } from 'src/modules/api/auth/dto/auth/change-password.dto';
 import { JwtAuthGuard } from 'src/modules/api/auth/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/modules/api/auth/guard/roles.guard';
 
@@ -21,13 +20,13 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [
-        { provide: AuthService, useValue: mockAuthService },
-      ],
+      providers: [{ provide: AuthService, useValue: mockAuthService }],
     })
-    .overrideGuard(JwtAuthGuard).useValue({ canActivate: () => true })
-    .overrideGuard(RolesGuard).useValue({ canActivate: () => true })
-    .compile();
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(RolesGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);
@@ -67,7 +66,10 @@ describe('AuthController', () => {
       const req = { user: { id: 'adminId' } };
       const targetUserId = 'targetId';
       await controller.impersonate(req, targetUserId);
-      expect(authService.impersonate).toHaveBeenCalledWith('adminId', targetUserId);
+      expect(authService.impersonate).toHaveBeenCalledWith(
+        'adminId',
+        targetUserId,
+      );
     });
   });
 });

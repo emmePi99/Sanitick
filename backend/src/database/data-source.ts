@@ -15,7 +15,12 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: false,
-  logging: (process.env.DB_LOGGING === 'true' ? true : (process.env.DB_LOGGING === 'all' ? 'all' : false)),
+  logging:
+    process.env.DB_LOGGING === 'true'
+      ? true
+      : process.env.DB_LOGGING === 'all'
+        ? 'all'
+        : false,
   entities: [User, Doctor, Booking, DoctorSchedule],
   migrations: ['src/database/migrations/*.ts'],
   subscribers: [],
