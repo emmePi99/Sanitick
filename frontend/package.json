@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate-api": "openapi-generator-cli generate -i http://localhost:3000/api/docs-json -g typescript-angular -o src/app/core/generated --additional-properties=providedInRoot=true --skip-validate-spec",
+    "generate-api": "npm run check-api-up && openapi-generator-cli generate -i http://localhost:3000/api/docs-json -g typescript-angular -o src/app/core/generated --additional-properties=providedInRoot=true --skip-validate-spec",
+    "check-api-up": "curl -s -f http://localhost:3000/api/docs-json > /dev/null || (echo \"Error: Backend API is not running at http://localhost:3000/api/docs-json. Please start the backend server before generating the API client.\" && exit 1)",
     "lint": "eslint \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",
     "prepare": "husky"
