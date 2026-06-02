@@ -44,9 +44,7 @@ export class AuthService {
     await this.userCoreService.create(registerDto);
   }
 
-  async setPassword(
-    changePasswordDto: ChangePasswordDto,
-  ): Promise<void> {
+  async setPassword(changePasswordDto: ChangePasswordDto): Promise<void> {
     const user = await this.userCoreService.findOneBy({
       activationToken: changePasswordDto.token,
     });

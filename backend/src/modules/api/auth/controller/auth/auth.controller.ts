@@ -45,9 +45,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Set password for account activation' })
   @ApiResponse({ status: 200, description: 'Password set successfully' })
-  async setPassword(
-    @Body() setPasswordDto: ChangePasswordDto,
-  ): Promise<void> {
+  async setPassword(@Body() setPasswordDto: ChangePasswordDto): Promise<void> {
     await this.authService.setPassword(setPasswordDto);
   }
 
