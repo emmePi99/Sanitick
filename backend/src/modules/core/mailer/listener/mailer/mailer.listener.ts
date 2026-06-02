@@ -11,7 +11,7 @@ export class MailerListener {
   constructor(private readonly mailerService: MailerService) {}
 
   @OnEvent(UserCreatedEvent.KEY, { async: true })
-  async handleUserCreatedEvent(event: UserCreatedEvent) {
+  async handleUserCreatedEvent(event: UserCreatedEvent): Promise<void> {
     if (!event.token) {
       this.logger.error(
         "token mancante nel payload dell'evento UserCreatedEvent. Mail non inviata",
@@ -28,7 +28,7 @@ export class MailerListener {
   }
 
   @OnEvent(DoctorCreatedEvent.KEY, { async: true })
-  async handleDoctorCreatedEvent(event: DoctorCreatedEvent) {
+  async handleDoctorCreatedEvent(event: DoctorCreatedEvent): Promise<void> {
     this.logger.log(
       `Ricevuto evento creazione per il Dott. ${event.lastName} (${event.email})`,
     );
