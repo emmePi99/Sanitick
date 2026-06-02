@@ -1,5 +1,5 @@
 import { DoctorSpecialization } from '@shared/index';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsString } from 'class-validator';
 import { RegisterDto } from '../../auth/dto/auth/register.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -10,7 +10,7 @@ export class CreateDoctorDto extends RegisterDto {
     enum: DoctorSpecialization,
     example: DoctorSpecialization.CARDIOLOGY,
   })
-  @IsString()
+  @IsEnum(DoctorSpecialization, { message: 'Specializzazione non valida' })
   @IsNotEmpty({ message: 'La specializzazione è obbligatoria' })
   specialization: DoctorSpecialization;
 
