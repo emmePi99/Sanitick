@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { BookingService, Booking } from '../../../core/services/booking.service';
+import { BookingService, Booking } from '@core/services/booking.service';
 
 @Component({
   selector: 'app-bookings',

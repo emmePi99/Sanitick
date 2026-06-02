@@ -1,15 +1,21 @@
 import { TestBed } from '@angular/core/testing';
-import { BookingSearchComponent } from './booking-search.component';
+import { BookingCreateComponent } from './booking-create.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-describe('BookingSearchComponent', () => {
+describe('BookingCreateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BookingSearchComponent]
+      imports: [BookingCreateComponent],
+      providers: [
+        provideHttpClient(),
+        provideAnimationsAsync()
+      ]
     }).compileComponents();
   });
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(BookingSearchComponent);
+    const fixture = TestBed.createComponent(BookingCreateComponent);
     expect(fixture.componentInstance).toBeTruthy();
   });
 });
